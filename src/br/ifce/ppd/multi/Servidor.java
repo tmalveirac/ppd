@@ -47,6 +47,10 @@ public class Servidor {
 					out.writeUTF("Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!");
 				}
 				
+                                //Envia Notificação para todos
+                                String notificacao = new String (usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de entrar.");
+                                sendChatForAll(notificacao);
+                                
 			} catch (Exception e) {
 				System.out.println("Servidor Exceção construtor");
 				System.out.println("" + e.getMessage());
@@ -59,16 +63,18 @@ public class Servidor {
 			
 			for (Usuario u : usuarioVector){
 				try {
-					String nome = usuarioBySocket(usuarioVector,this.cliente).getNome();
-					String mensagem = new String(nome + " Enviou: "  + msg);
-					conversaVector.add(mensagem);
-					//System.out.println("Conversa Vector size = " + conversaVector.size());
+					//String nome = usuarioBySocket(usuarioVector,this.cliente).getNome();
+					//String mensagem = new String(nome + " Enviou: "  + msg);
+					
+                                        //conversaVector.add(mensagem);
+					conversaVector.add(msg);
+                                        //System.out.println("Conversa Vector size = " + conversaVector.size());
 					
 					//Envia, menos para mim
 					if (!u.getSocket().equals(this.cliente)){
 						DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
 						
-						outData.writeUTF(mensagem);
+						outData.writeUTF(msg);
 						//outData.close();
 					}
 				} catch (Exception e) {
@@ -82,11 +88,13 @@ public class Servidor {
 		public void run() {
 
 			try {
-
+  
 				while (true) {
 					String data = in.readUTF();
 					System.out.println(usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data);
 					
+                                        data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data;
+                                        
 					//Envia para todos
 					sendChatForAll(data);
 				}
@@ -175,6 +183,7 @@ public class Servidor {
 					String nome = in.readUTF();
 					//out.writeUTF("Bem vindo " + nome);
 					
+                                                
 					Usuario u = new Usuario(socket, nome, id++);
 					
 					usuarioVector.add(u);
