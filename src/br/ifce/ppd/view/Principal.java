@@ -2,6 +2,8 @@ package br.ifce.ppd.view;
 
 
 import br.ifce.ppd.multi.*;
+import java.util.Vector;
+import javax.swing.DefaultListModel;
 
 /*
  * To change this template, choose Tools | Templates
@@ -32,8 +34,30 @@ public class Principal extends javax.swing.JFrame {
 	txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());
     }
     
-    public static void populaListaChat(){
+    public static void insereListaChat(String nome){
+        //lista.add(nome);
+        //listModel = (DefaultListModel) listViewChat.getModel();
         
+        listModel.addElement(nome);
+        listViewChat.setModel(listModel);
+        
+        //System.out.println(lista);
+    }
+    
+    public static void removeListaChat(String nome){
+         //listModel = (DefaultListModel) listViewChat.getModel();
+         listModel.remove(idNomeListaChat(nome));
+         listViewChat.setModel(listModel);
+    }
+    
+    public static int idNomeListaChat(String nome){
+        listModel = (DefaultListModel) listViewChat.getModel();
+        for (int i=0; i<listModel.getSize();i++){
+            if (listModel.get(i).equals(nome)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -80,11 +104,6 @@ public class Principal extends javax.swing.JFrame {
         txtAreaChat.setMinimumSize(new java.awt.Dimension(0, 5));
         jScrollPane1.setViewportView(txtAreaChat);
 
-        listViewChat.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", " " };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane2.setViewportView(listViewChat);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -104,7 +123,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -154,9 +173,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarChatActionPerformed
         
-        txtAreaChat.append(this.login + " enviou: " + txtFieldChat.getText() + "\n");
-	txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());       
-      
+        //txtAreaChat.append(this.login + " enviou: " + txtFieldChat.getText() + "\n");
+	//txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());       
+        escreveMensagemChat(login + " enviou: " + txtFieldChat.getText());
         cliente.enviarMensagemChat(txtFieldChat.getText());
          
         txtFieldChat.setText("");
@@ -222,4 +241,7 @@ public class Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Cliente cliente;
     private String login;
+    private static Vector<String> lista = new Vector<>(); 
+    private static DefaultListModel  listModel = new DefaultListModel();   
+    
 }

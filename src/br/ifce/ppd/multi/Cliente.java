@@ -1,6 +1,7 @@
 package br.ifce.ppd.multi;
 
 import br.ifce.ppd.view.Principal;
+import br.ifce.utils.Protocolo;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import sun.org.mozilla.javascript.regexp.SubString;
 
 
 public class Cliente {
@@ -36,7 +38,9 @@ public class Cliente {
                        while (true) {
                                String data = in.readUTF();
                                System.out.println(data);
-                               Principal.escreveMensagemChat(data);
+                               
+                               tratarMensagemRecebida(data);
+                               //Principal.escreveMensagemChat(data);
                        }
 
                } catch (Exception e) {
@@ -49,7 +53,36 @@ public class Cliente {
 
            }
     }
-      
+     
+    public void tratarMensagemRecebida(String msg){
+        
+        String comando = msg.substring(0, 8); //Pega o comando 
+        String payLoad;
+        
+        switch (comando){
+            
+            case Protocolo.CHAT_INS:
+                payLoad = msg.replaceFirst(Protocolo.CHAT_INS, "");
+                Principal.insereListaChat(payLoad);
+                break;
+            
+            case Protocolo.CHAT_MSG:
+                payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
+                Principal.escreveMensagemChat(payLoad);                
+                break;
+            
+            case Protocolo.CHAT_NOT:
+                
+                payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
+                Principal.escreveMensagemChat(payLoad);
+                break;
+                
+            default:
+                System.out.println("Case Default - MSG Recebida: " + comando);
+                
+        }
+        
+    }
         
     public void conectar(){
         try {

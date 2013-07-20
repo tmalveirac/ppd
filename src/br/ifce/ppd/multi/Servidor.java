@@ -1,5 +1,7 @@
 package br.ifce.ppd.multi;
 
+import br.ifce.ppd.view.Principal;
+import br.ifce.utils.Protocolo;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Servidor {
@@ -31,25 +35,26 @@ public class Servidor {
 				out = new DataOutputStream(cliente.getOutputStream());
 				
 				
-				System.out.println("Tamanho da msg antigas: " + conversaVector.size());
+				//System.out.println("Tamanho da msg antigas: " + conversaVector.size());
 				
 				//Envia toda a conversa antiga:
 				for (String s : conversaVector){
-					out.writeUTF(s);
+					out.writeUTF(Protocolo.CHAT_MSG+s);
 				}
 				
 				//Se há mensagens antigas
 				if (conversaVector.size()>0){
-					out.writeUTF("---Mensagens antigas acima---");
-					out.writeUTF("Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!");
+					out.writeUTF(Protocolo.CHAT_MSG+"---Mensagens antigas acima---");
+					out.writeUTF(Protocolo.CHAT_MSG+"Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!");
 				}
 				else{
-					out.writeUTF("Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!");
+					out.writeUTF(Protocolo.CHAT_MSG+"Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!");
 				}
 				
                                 //Envia Notificação para todos
                                 String notificacao = new String (usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de entrar.");
-                                sendChatForAll(notificacao);
+                                //sendChatForAll(notificacao);
+                                enviarMensagemParaTodos(Protocolo.CHAT_NOT, notificacao);
                                 
 			} catch (Exception e) {
 				System.out.println("Servidor Exceção construtor");
@@ -57,6 +62,27 @@ public class Servidor {
 			}
 		}
 		
+                
+                public void enviarMensagemParaTodos(String protocolo, String msg){
+                    
+                    for (Usuario u : usuarioVector){
+                       
+                        try {
+                             DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
+                             
+                             conversaVector.add(msg); 
+                             
+                             if (!u.getSocket().equals(this.cliente)){
+                                 outData.writeUTF(protocolo+msg);
+                             }
+                           
+                         
+                        } catch (IOException ex) {
+                            System.out.println("Servidor Exceção enviarMensagemParaTodos()");
+                            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                        } 
+                    }
+                }
 		
 		//Envia tudo que recebe para todos os nós
 		public void sendChatForAll(String msg){
@@ -74,7 +100,7 @@ public class Servidor {
 					if (!u.getSocket().equals(this.cliente)){
 						DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
 						
-						outData.writeUTF(msg);
+						outData.writeUTF(Protocolo.CHAT_MSG+msg);
 						//outData.close();
 					}
 				} catch (Exception e) {
@@ -96,7 +122,8 @@ public class Servidor {
                                         data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data;
                                         
 					//Envia para todos
-					sendChatForAll(data);
+					//sendChatForAll(data);
+                                        enviarMensagemParaTodos(Protocolo.CHAT_MSG, data);
 				}
 
 			} catch (Exception e) {
@@ -114,6 +141,7 @@ public class Servidor {
 				}
 				
 				removeUsuario(usuarioVector, cliente);
+                                //Principal.removeListaChat(usuarioBySocket(usuarioVector, cliente).getNome());
 			}
 
 			super.run();
@@ -188,6 +216,10 @@ public class Servidor {
 					
 					usuarioVector.add(u);
 					
+                                        //Add usuario no chat
+                                        out.writeUTF(Protocolo.CHAT_INS+nome);
+                                        
+                                        
 					ServidorThread c1 = new ServidorThread(socket);
 					c1.start();
 					
