@@ -1,5 +1,11 @@
 package br.ifce.ppd.view;
 
+/**
+ * Classe: Principal.java
+ * Código View da janela Principal da Aplicação
+ * @author malveira
+ * 
+ */
 
 import br.ifce.ppd.multi.*;
 import br.ifce.utils.Protocolo;
@@ -195,14 +201,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarChatActionPerformed
-        
-        //txtAreaChat.append(this.login + " enviou: " + txtFieldChat.getText() + "\n");
-	//txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());       
-        escreveMensagemChat(login + " enviou: " + txtFieldChat.getText());
-        cliente.enviarMensagemChat(Protocolo.CHAT_MSG,txtFieldChat.getText());
-         
+        cliente.enviarMensagemChat(Protocolo.CHAT_MSG,txtFieldChat.getText()); 
         txtFieldChat.setText("");
-
     }//GEN-LAST:event_btnEnviarChatActionPerformed
 
     private void txtFieldChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldChatActionPerformed
@@ -210,21 +210,18 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldChatActionPerformed
 
     private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
-//        //Envia mensagem SAI para o servidor
-//        cliente.enviarMensagemChat(Protocolo.CHAT_SAI,"");
-//        //cliente.desconectar();
-//        System.exit(0);
+        //Finaliza o cliente
         sair();
     }//GEN-LAST:event_menuSairActionPerformed
     
-    
+    //Envia uma mensagem de saída para o Servidor e termina 
     public void sair() {
         //Envia mensagem SAI para o servidor
         cliente.enviarMensagemChat(Protocolo.CHAT_SAI,"");
-        //cliente.desconectar();
         System.exit(0);
     }
     
+    // Código para Tratar evento Fechar Janela pelo X
     private void inicializar() {
         addWindowListener(new WindowListener() {
 
@@ -263,14 +260,10 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void windowDeactivated(WindowEvent we) {
                 //To change body of generated methods, choose Tools | Templates.
-            }
-
-           
+            }      
         });   
     }
-    
-    
-    
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarChat;
     private javax.swing.JMenu jMenu1;
@@ -288,7 +281,6 @@ public class Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Cliente cliente;
     private String login;
-    private static Vector<String> lista = new Vector<>(); 
-    private static DefaultListModel  listModel = new DefaultListModel();   
-   
+    //Model utilizado para atualizar lista de logins na tela
+    private static DefaultListModel  listModel = new DefaultListModel();    
 }

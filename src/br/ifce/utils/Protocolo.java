@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.utils;
 
 /**
- *
+ * Classe: Protocolo.java
+ * Define o protocolo de comunicação utilizado entre Cliente/Servidor
  * @author malveira
+ * 
  */
+
 public class Protocolo {
     
     //Cada comando possui 8 caracteres
