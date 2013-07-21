@@ -9,6 +9,7 @@ package br.ifce.ppd.view;
  */
 
 import br.ifce.ppd.multi.Cliente;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
@@ -106,6 +107,14 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String login = txtLogin.getText();
+        //trata login vazio
+        if(login.equals("")){
+            JOptionPane.showMessageDialog(null,
+                "Login inválido. Tente novamente.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         //Cria a janela proncipal, passando o login do usuário
         new Principal(login); 

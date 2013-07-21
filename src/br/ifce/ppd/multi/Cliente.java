@@ -101,10 +101,14 @@ public class Cliente {
             cliente = new Socket(endereco, 1024);
             in =  new DataInputStream(cliente.getInputStream());
             out = new DataOutputStream(cliente.getOutputStream());
-            new ClienteLerThread().start();
             
         } catch (Exception e) {
-        }
+            //Servidor fora do ar, avisa ao usuário
+            Principal.alertaServidorOff();
+        } 
+        //Se conectou, inicia a thread
+        new ClienteLerThread().start();
+       
     }
     
     /**

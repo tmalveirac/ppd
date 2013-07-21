@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /*
  * To change this template, choose Tools | Templates
@@ -30,18 +31,23 @@ public class Principal extends javax.swing.JFrame {
     public Principal(String login) {
         initComponents();
         inicializar();
-        this.setVisible(true);
         cliente = new Cliente();
         cliente.conectar();
+        this.setVisible(true);
         cliente.enviarMensagemChat(Protocolo.CHAT_INS,login);
         this.login=login;
         
     }
     
-    
-   
+    public static void alertaServidorOff(){
+        JOptionPane.showMessageDialog(
+                null,
+                "O servidor não está respondendo. Tente novamente mais tarde.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+        System.exit(0);
+    }
 
-   
     public static void escreveMensagemChat(String msg) {
         txtAreaChat.append(msg + "\n");
 	txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());
