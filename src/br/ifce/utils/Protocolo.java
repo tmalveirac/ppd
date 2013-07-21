@@ -3,7 +3,7 @@ package br.ifce.utils;
 /**
  * Classe: Protocolo.java
  * Define o protocolo de comunicação utilizado entre Cliente/Servidor
- * @author malveira
+ * @author Tiago Malveira
  * 
  */
 

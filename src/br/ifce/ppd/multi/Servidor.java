@@ -3,7 +3,7 @@ package br.ifce.ppd.multi;
 /**
  * Classe: Servidor.java
  * Código do Servidor da aplicação
- * @author malveira
+ * @author Tiago Malveira
  * 
  */
 
@@ -233,7 +233,6 @@ public class Servidor {
         * @param socket     socket do usuário
         * @return           usuário relacionado a socket se existir, caso contrário, null
         */
-	//Retorna um Usuário relacionado ao socket, caso exista. Caso contrário, devolve null
 	public static Usuario usuarioBySocket (Vector<Usuario> usuarios, Socket socket){		
 		for (Usuario u : usuarios){
 			if (u.getSocket().equals(socket)){
@@ -242,7 +241,14 @@ public class Servidor {
 		}		
 		return null;		
 	}
-	
+        
+        /**
+        * Verifica se existe um Usuário com um determinado nome
+        *             
+        * @param usuarios   coleção de usuários ativos
+        * @param nome       nome do usuário
+        * @return           true, se existe um usuário com mesmo nome, caso contrário, false
+        */	
         public static boolean existeUsuarioByNome(Vector<Usuario> usuarios, String nome){
             for (Usuario u : usuarios){
                 if (u.getNome().equals(nome)){
@@ -252,7 +258,10 @@ public class Servidor {
             return false;
         }
         
-	//Método principal do Servidor
+	/**
+        * Método principal do Servidor
+        *             
+        */
 	public static void main(String[] args) {		
 		try {
 			
@@ -261,8 +270,6 @@ public class Servidor {
                     System.out.println("Esperando conexão");
 			
                     try {
-                            
-
                             while (true) {
                                     //Espera clientes 
                                     Socket socket = servidor.accept();

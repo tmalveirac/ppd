@@ -3,16 +3,14 @@ package br.ifce.ppd.view;
 /**
  * Classe: Login.java
  * Código View da janela de Login - Contém o método main do lado Cliente
- * @author malveira
+ * @author Tiago Malveira
  * 
- * @TODO: Tratar caso em que o servidor esteja fora do ar
+ * @TODO: Fazer validador para entrada do parâmetro do servidor: 127.0.0.1
  */
 
-import br.ifce.ppd.multi.Cliente;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
-
     public Login() {
         initComponents();
     }
@@ -111,21 +109,25 @@ public class Login extends javax.swing.JFrame {
         String servidor = txtServidor.getText();
         
         //trata campos vazio
-        if (isCampoVazio(login)) return;
-        if (isCampoVazio(porta)) return;
-        if (isCampoVazio(servidor)) return;
-        
-        
+        if (isCampoVazio("Login",login)) return;
+        if (isCampoVazio("Servidor",servidor)) return;
+        if (isCampoVazio("Porta",porta)) return;
         
         //Cria a janela proncipal, passando o login do usuário
         new Principal(login,servidor,porta); 
         setVisible(false);
     }//GEN-LAST:event_btnLoginActionPerformed
 
-    public boolean isCampoVazio(String campo){
+    /**
+    * Verifica se uma string é vazia e informa ao usuário
+    *             
+    * @param campo         campo a ser validado
+    * @return              true, se campo é vazio, caso contrário false
+    */    
+    public boolean isCampoVazio(String tipo, String campo){
          if(campo.equals("")){
              JOptionPane.showMessageDialog(null,
-                campo + " inválido. Tente novamente.",
+                "Parâmetro "+ tipo + " inválido. Tente novamente.",
                 "Atenção",
                 JOptionPane.WARNING_MESSAGE);
              return true;
@@ -135,6 +137,10 @@ public class Login extends javax.swing.JFrame {
          }           
     }
     
+    /**
+    * Métdodo principal 
+    *             
+    */  
     public static void main(String args[]) {
       
         //Código gerado pelo Netbeans

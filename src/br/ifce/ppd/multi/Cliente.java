@@ -3,7 +3,7 @@ package br.ifce.ppd.multi;
 /**
  * Classe: Cliente.java
  * Código do Cliente da aplicação
- * @author malveira
+ * @author Tiago Malveira
  * 
  */
 
@@ -40,8 +40,6 @@ public class Cliente {
                        tratarMensagemRecebida(data);
                } catch (Exception e) {
                        System.out.println("Cliente Exceção Thread Ler - Cliente Fechado");
-                       //System.out.println("" + e.getMessage());
-                       //e.printStackTrace();
                }
                super.run();
            }
@@ -80,7 +78,7 @@ public class Cliente {
                 break;
             
             case Protocolo.CHAT_REM:
-                //Desconectar um cliente
+                //Excluir um cliente
                 payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
                 Principal.removeListaChat(payLoad);
                 break;    
@@ -121,15 +119,6 @@ public class Cliente {
     * @return              void
     */
     public void enviarMensagemChat(String protocolo,String msg){
-        try {
-            out.writeUTF(protocolo+msg);
-            out.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-     public void enviarTesteLogin(String protocolo,String msg){
         try {
             out.writeUTF(protocolo+msg);
             out.flush();
