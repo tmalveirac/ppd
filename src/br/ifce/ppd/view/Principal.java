@@ -3,6 +3,8 @@ package br.ifce.ppd.view;
 
 import br.ifce.ppd.multi.*;
 import br.ifce.utils.Protocolo;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 
@@ -21,6 +23,7 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal(String login) {
         initComponents();
+        inicializar();
         this.setVisible(true);
         cliente = new Cliente();
         cliente.conectar();
@@ -28,6 +31,9 @@ public class Principal extends javax.swing.JFrame {
         this.login=login;
         
     }
+    
+    
+   
 
    
     public static void escreveMensagemChat(String msg) {
@@ -45,8 +51,11 @@ public class Principal extends javax.swing.JFrame {
     
     public static void removeListaChat(String nome){
          //listModel = (DefaultListModel) listViewChat.getModel();
-         listModel.remove(idNomeListaChat(nome));
-         listViewChat.setModel(listModel);
+        if (idNomeListaChat(nome)!=-1){
+            listModel.remove(idNomeListaChat(nome));
+            listViewChat.setModel(listModel);   
+        } 
+       
     }
     
     public static int idNomeListaChat(String nome){
@@ -201,53 +210,67 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldChatActionPerformed
 
     private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+//        //Envia mensagem SAI para o servidor
+//        cliente.enviarMensagemChat(Protocolo.CHAT_SAI,"");
+//        //cliente.desconectar();
+//        System.exit(0);
+        sair();
+    }//GEN-LAST:event_menuSairActionPerformed
+    
+    
+    public void sair() {
         //Envia mensagem SAI para o servidor
         cliente.enviarMensagemChat(Protocolo.CHAT_SAI,"");
         //cliente.desconectar();
         System.exit(0);
-        
-    }//GEN-LAST:event_menuSairActionPerformed
+    }
+    
+    private void inicializar() {
+        addWindowListener(new WindowListener() {
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Principal().setVisible(true);
-//
-//
-//
-//
-//
-//
-//            }
-//        });
-//    }
+            @Override
+            public void windowOpened(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowClosing(WindowEvent we) {
+            if (we.getID() == WindowEvent.WINDOW_CLOSING) {
+                sair();
+            }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowIconified(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowActivated(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+
+           
+        });   
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarChat;
     private javax.swing.JMenu jMenu1;
@@ -267,5 +290,5 @@ public class Principal extends javax.swing.JFrame {
     private String login;
     private static Vector<String> lista = new Vector<>(); 
     private static DefaultListModel  listModel = new DefaultListModel();   
-    
+   
 }

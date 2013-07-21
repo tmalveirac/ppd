@@ -40,6 +40,7 @@ public class Cliente {
                try {
                    
                        String data = in.readUTF();
+                       System.out.println("Mensagem Recebida: "+data);
 
                        while (!data.equals(Protocolo.CHAT_SAI)) {
                                
@@ -48,6 +49,7 @@ public class Cliente {
                                tratarMensagemRecebida(data);
                                
                                data = in.readUTF();
+                               System.out.println("Mensagem Recebida: "+data);
                        }
                        
                        tratarMensagemRecebida(data);

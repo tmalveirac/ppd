@@ -96,13 +96,12 @@ public class Servidor {
                              
                              //Se for mensagem de Remoção de logins
                              if (protocolo.equals(Protocolo.CHAT_REM)){
-                                for (Usuario u2 : usuarioVector) {
-                                    if (!u2.getNome().equals(msg)){
-                                        outData.writeUTF(protocolo+msg);
-                                    }
+                                
+                                if (!u.getNome().equals(msg)){
+                                    outData.writeUTF(protocolo+msg);
+                                }
                                     
-                                 }
-                                 continue;
+                                continue;
                              }
                              
                              
@@ -239,6 +238,7 @@ public class Servidor {
 
 			try {
                                 String data = in.readUTF();
+                                System.out.println("Mensagem Recebida: "+data);
 				while (!data.equals(Protocolo.CHAT_SAI)) {
 					 
 					System.out.println(usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data);
@@ -252,6 +252,7 @@ public class Servidor {
                                         
                                         tratarMensagemRecebida(data);
                                         data = in.readUTF();
+                                        System.out.println("Mensagem Recebida: "+data);
 				}
                                 
                                 tratarMensagemRecebida(data);
@@ -321,6 +322,7 @@ public class Servidor {
 					System.out.println("Solicitou Login");
 					//out.writeUTF("Informe seu login: ");
 					String nome = in.readUTF();
+                                        System.out.println("Mensagem Recebida: "+nome);
 					//out.writeUTF("Bem vindo " + nome);
 					
                                         nome = nome.replaceFirst(Protocolo.CHAT_INS, "");
