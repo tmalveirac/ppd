@@ -20,6 +20,8 @@ public class Servidor {
 	
 	private static Vector<Usuario> usuarioVector = new Vector<Usuario>();
 	private static Vector<String> conversaVector = new Vector<String>();
+       
+    
 	
 	private static class ServidorThread extends Thread {
 
@@ -37,6 +39,9 @@ public class Servidor {
 				
 				//System.out.println("Tamanho da msg antigas: " + conversaVector.size());
 				
+                                //Envia lista de Login
+                                enviarMensagemParaTodos(Protocolo.CHAT_INS, null);
+                                
 				//Envia toda a conversa antiga:
 				for (String s : conversaVector){
 					out.writeUTF(Protocolo.CHAT_MSG+s);
@@ -52,7 +57,7 @@ public class Servidor {
 				}
 				
                                 //Envia Notificação para todos
-                                String notificacao = new String (usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de entrar.");
+                                String notificacao = usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de entrar.";
                                 //sendChatForAll(notificacao);
                                 enviarMensagemParaTodos(Protocolo.CHAT_NOT, notificacao);
                                 
@@ -62,19 +67,49 @@ public class Servidor {
 			}
 		}
 		
+                public void enviarMensagemParaUmUsuario(String protocolo, String msg){
+                    try {
+                        out.writeUTF(protocolo+msg);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }                         
                 
                 public void enviarMensagemParaTodos(String protocolo, String msg){
                     
                     for (Usuario u : usuarioVector){
                        
+                        
                         try {
+                            
+                             
                              DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
                              
+                             //Se for mensagem de Logins para popular lista
+                             if (protocolo.equals(Protocolo.CHAT_INS)){
+                                 for (Usuario u2 : usuarioVector) {
+                                    outData.writeUTF(protocolo+u2.getNome());
+                                 }
+                                 continue;
+                             }
+                             
+                             //Se for mensagem de Remoção de logins
+                             if (protocolo.equals(Protocolo.CHAT_SAI)){
+                                for (Usuario u2 : usuarioVector) {
+                                    outData.writeUTF(protocolo+u2.getNome());
+                                 }
+                                 continue;
+                             }
+                             
+                             
+                             //Se for mensagem de chat ou notificações
                              conversaVector.add(msg); 
                              
                              if (!u.getSocket().equals(this.cliente)){
                                  outData.writeUTF(protocolo+msg);
                              }
+                             
+                             
                            
                          
                         } catch (IOException ex) {
@@ -109,28 +144,70 @@ public class Servidor {
 				}
 			}
 		}
+                
+                
+                
+                
+                public void tratarMensagemRecebida(String msg){
 
-		@Override
-		public void run() {
+                    String comando = msg.substring(0, 8); //Pega o comando 
+                    String payLoad;
 
-			try {
-  
-				while (true) {
-					String data = in.readUTF();
-					System.out.println(usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data);
-					
-                                        data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data;
-                                        
-					//Envia para todos
-					//sendChatForAll(data);
-                                        enviarMensagemParaTodos(Protocolo.CHAT_MSG, data);
-				}
+                    switch (comando){
 
-			} catch (Exception e) {
-				System.out.println("Servidor Exceção Thread receive");
-				System.out.println("" + e.getMessage());
+                        case Protocolo.CHAT_INS:
+                                //Não Utilizado
+                            break;
 
-				//Caso o cliente tenha desconectado, remover da lista
+                        case Protocolo.CHAT_MSG:
+                            payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
+                            String data;
+                            data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + payLoad;
+
+                            enviarMensagemParaTodos(Protocolo.CHAT_MSG, data);
+
+                            break;
+
+                        case Protocolo.CHAT_NOT:
+                                
+                            break;
+                            
+                        case Protocolo.CHAT_SAI:
+                            
+                            enviarMensagemParaTodos(Protocolo.CHAT_SAI, usuarioBySocket(usuarioVector, cliente).getNome());
+                            removeUsuario(usuarioVector, cliente);
+                            //enviarMensagemParaTodos(Protocolo.CHAT_INS, null); //Atualizar Lista de Logins
+                            
+                            System.out.println("Removeu Usuario ");
+                            
+                            break;
+
+                        default:
+                            System.out.println("Case Default - MSG Recebida: " + comando);
+
+                    }
+
+                }
+                
+                 //Remove um socket da lista, devolvendo true. Caso contrário, devolve false
+                public boolean removeUsuario (Vector<Usuario> usuarios, Socket socket){
+
+                        int usuarioRemovido=-1;
+                        int i=0;
+
+                        for (Usuario u : usuarios){
+                                if (u.getSocket().equals(socket)){
+                                        usuarioRemovido=i;
+                                        break;
+                                }
+                                i++;
+                        }
+
+
+                        if (usuarioRemovido!=-1){
+
+                                usuarios.remove(usuarioRemovido);
+                                //Caso o cliente tenha desconectado, remover da lista
 				try {
 					in.close();
 					out.close();
@@ -139,8 +216,54 @@ public class Servidor {
 					System.out.println("Servidor Exceção Thread receive - Fecha fluxo");
 					e1.printStackTrace();
 				}
-				
-				removeUsuario(usuarioVector, cliente);
+                                
+                                return true;
+
+                        }
+
+                        return false;
+                }
+
+	
+                
+
+		@Override
+		public void run() {
+
+			try {
+                                String data = in.readUTF();
+				while (!data.equals(Protocolo.CHAT_SAI)) {
+					 
+					System.out.println(usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data);
+//					
+//                                                                             
+//                                        data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + data;
+//                                        
+//					//Envia para todos
+//					//sendChatForAll(data);
+//                                        enviarMensagemParaTodos(Protocolo.CHAT_MSG, data);
+                                        
+                                        tratarMensagemRecebida(data);
+                                        data = in.readUTF();
+				}
+                                
+                                tratarMensagemRecebida(data);
+
+			} catch (Exception e) {
+				System.out.println("Servidor Exceção Thread receive");
+				System.out.println("" + e.getMessage());
+
+//				//Caso o cliente tenha desconectado, remover da lista
+//				try {
+//					in.close();
+//					out.close();
+//					cliente.close();
+//				} catch (IOException e1) {
+//					System.out.println("Servidor Exceção Thread receive - Fecha fluxo");
+//					e1.printStackTrace();
+//				}
+//				
+//				removeUsuario(usuarioVector, cliente);
                                 //Principal.removeListaChat(usuarioBySocket(usuarioVector, cliente).getNome());
 			}
 
@@ -148,29 +271,11 @@ public class Servidor {
 
 		}
 	}
+        
+        
+     
+        
 	
-	//Remove um socket da lista, devolvendo true. Caso contrário, devolve false
-	public static boolean removeUsuario (Vector<Usuario> usuarios, Socket socket){
-		
-		int usuarioRemovido=-1;
-		int i=0;
-		
-		for (Usuario u : usuarios){
-			if (u.getSocket().equals(socket)){
-				usuarioRemovido=i;
-				break;
-			}
-			i++;
-		}
-		
-		
-		if (usuarioRemovido!=-1){
-			usuarios.remove(usuarioRemovido);
-			return true;
-		}
-		
-		return false;
-	}
 	
 	//Retorna um Usuário relacionado ao socket, caso exista. Caso contrário, devolve null
 	public static Usuario usuarioBySocket (Vector<Usuario> usuarios, Socket socket){
@@ -211,13 +316,14 @@ public class Servidor {
 					String nome = in.readUTF();
 					//out.writeUTF("Bem vindo " + nome);
 					
+                                        nome = nome.replaceFirst(Protocolo.CHAT_INS, "");
                                                 
 					Usuario u = new Usuario(socket, nome, id++);
 					
 					usuarioVector.add(u);
 					
                                         //Add usuario no chat
-                                        out.writeUTF(Protocolo.CHAT_INS+nome);
+                                        //out.writeUTF(Protocolo.CHAT_INS+nome);
                                         
                                         
 					ServidorThread c1 = new ServidorThread(socket);

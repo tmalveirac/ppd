@@ -22,10 +22,14 @@ public class Cliente {
     private Socket cliente;
     private DataInputStream in;
     private DataOutputStream out;
+    private ClienteLerThread thread;
+    
     	
 
     private class ClienteLerThread extends Thread {
-
+        
+        volatile boolean flgFinalizar = false;
+        
            public ClienteLerThread () {
 
            }
@@ -34,14 +38,21 @@ public class Cliente {
            public void run() {
 
                try {
+                   
+                       String data = in.readUTF();
 
-                       while (true) {
-                               String data = in.readUTF();
+                       while (!data.equals(Protocolo.CHAT_SAI)) {
+                               
                                System.out.println(data);
                                
                                tratarMensagemRecebida(data);
-                               //Principal.escreveMensagemChat(data);
+                               
+                               data = in.readUTF();
                        }
+                       
+                       tratarMensagemRecebida(data);
+                       
+                       
 
                } catch (Exception e) {
                        System.out.println("Cliente Exceção Thread Ler");
@@ -76,6 +87,13 @@ public class Cliente {
                 payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
                 Principal.escreveMensagemChat(payLoad);
                 break;
+            
+            case Protocolo.CHAT_SAI:
+                //Desconectar cliente
+                payLoad = msg.replaceFirst(Protocolo.CHAT_SAI, "");
+                Principal.removeListaChat(payLoad);
+                desconectar();
+                break;
                 
             default:
                 System.out.println("Case Default - MSG Recebida: " + comando);
@@ -90,15 +108,26 @@ public class Cliente {
             cliente = new Socket(endereco, 1024);
             in =  new DataInputStream(cliente.getInputStream());
             out = new DataOutputStream(cliente.getOutputStream());
-            new ClienteLerThread().start();
+            thread = new ClienteLerThread();
+            thread.start();
+        } catch (Exception e) {
+        }
+
+    }
+    
+    public void desconectar(){
+        try {
+            in.close();
+            out.close();
+            cliente.close();
         } catch (Exception e) {
         }
 
     }
 
-    public void enviarMensagemChat(String msg){
+    public void enviarMensagemChat(String protocolo,String msg){
         try {
-            out.writeUTF(msg);
+            out.writeUTF(protocolo+msg);
             out.flush();
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);

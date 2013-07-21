@@ -2,6 +2,7 @@ package br.ifce.ppd.view;
 
 
 import br.ifce.ppd.multi.*;
+import br.ifce.utils.Protocolo;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 
@@ -23,7 +24,7 @@ public class Principal extends javax.swing.JFrame {
         this.setVisible(true);
         cliente = new Cliente();
         cliente.conectar();
-        cliente.enviarMensagemChat(login);
+        cliente.enviarMensagemChat(Protocolo.CHAT_INS,login);
         this.login=login;
         
     }
@@ -35,13 +36,11 @@ public class Principal extends javax.swing.JFrame {
     }
     
     public static void insereListaChat(String nome){
-        //lista.add(nome);
-        //listModel = (DefaultListModel) listViewChat.getModel();
+        if (idNomeListaChat(nome) == -1) {
+            listModel.addElement(nome);
+            listViewChat.setModel(listModel);
+        }
         
-        listModel.addElement(nome);
-        listViewChat.setModel(listModel);
-        
-        //System.out.println(lista);
     }
     
     public static void removeListaChat(String nome){
@@ -51,9 +50,9 @@ public class Principal extends javax.swing.JFrame {
     }
     
     public static int idNomeListaChat(String nome){
-        listModel = (DefaultListModel) listViewChat.getModel();
+        
         for (int i=0; i<listModel.getSize();i++){
-            if (listModel.get(i).equals(nome)){
+            if (listModel.get(i).toString().equals(nome)){
                 return i;
             }
         }
@@ -79,7 +78,9 @@ public class Principal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        menuSair = new javax.swing.JMenuItem();
+        menuSobre = new javax.swing.JMenu();
+        menuAjuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -123,7 +124,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -145,10 +146,23 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jMenu1.setText("Arquivo");
+
+        menuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        menuSair.setText("Sair");
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuSair);
+
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Sobre");
-        jMenuBar1.add(jMenu2);
+        menuSobre.setText("Sobre");
+        jMenuBar1.add(menuSobre);
+
+        menuAjuda.setText("Ajuda");
+        jMenuBar1.add(menuAjuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -176,7 +190,7 @@ public class Principal extends javax.swing.JFrame {
         //txtAreaChat.append(this.login + " enviou: " + txtFieldChat.getText() + "\n");
 	//txtAreaChat.setCaretPosition(txtAreaChat.getDocument().getLength());       
         escreveMensagemChat(login + " enviou: " + txtFieldChat.getText());
-        cliente.enviarMensagemChat(txtFieldChat.getText());
+        cliente.enviarMensagemChat(Protocolo.CHAT_MSG,txtFieldChat.getText());
          
         txtFieldChat.setText("");
 
@@ -185,6 +199,14 @@ public class Principal extends javax.swing.JFrame {
     private void txtFieldChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldChatActionPerformed
        btnEnviarChatActionPerformed(evt);
     }//GEN-LAST:event_txtFieldChatActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+        //Envia mensagem SAI para o servidor
+        cliente.enviarMensagemChat(Protocolo.CHAT_SAI,"");
+        //cliente.desconectar();
+        System.exit(0);
+        
+    }//GEN-LAST:event_menuSairActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -229,13 +251,15 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarChat;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private static javax.swing.JList listViewChat;
+    private javax.swing.JMenu menuAjuda;
+    private javax.swing.JMenuItem menuSair;
+    private javax.swing.JMenu menuSobre;
     private static javax.swing.JTextArea txtAreaChat;
     private javax.swing.JTextField txtFieldChat;
     // End of variables declaration//GEN-END:variables
