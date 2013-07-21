@@ -28,15 +28,23 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
-    public Principal(String login) {
+    public Principal(String login, String servidor, String porta) {
         initComponents();
         inicializar();
         cliente = new Cliente();
-        cliente.conectar();
-        this.setVisible(true);
-        cliente.enviarMensagemChat(Protocolo.CHAT_INS,login);
-        this.login=login;
+        cliente.conectar(servidor,porta);
+        cliente.enviarMensagemChat(Protocolo.CHAT_INS,login);   
         
+        this.login=login;
+        this.setVisible(true);
+    }
+    
+    public static void alertaServidorIfLoginAlterado(String login){  
+        JOptionPane.showMessageDialog(
+        null,
+        "Nome de usuário já existe. Seu login foi alterado para: " + login,
+        "Atenção",
+        JOptionPane.WARNING_MESSAGE);      
     }
     
     public static void alertaServidorOff(){

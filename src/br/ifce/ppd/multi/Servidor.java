@@ -7,6 +7,7 @@ package br.ifce.ppd.multi;
  * 
  */
 
+import br.ifce.ppd.view.Principal;
 import br.ifce.utils.Protocolo;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,6 +25,8 @@ public class Servidor {
 	private static Vector<Usuario> usuarioVector = new Vector<Usuario>();
 	// Vetor que armazena todas as mensagens do chat
         private static Vector<String> conversaVector = new Vector<String>();
+        // Id dos usuários: incremental - Usado para tratar login repetido, concatenando com seu ID
+        private static int id = 0;
 	
         //Thread Servidor
 	private static class ServidorThread extends Thread {
@@ -240,6 +243,15 @@ public class Servidor {
 		return null;		
 	}
 	
+        public static boolean existeUsuarioByNome(Vector<Usuario> usuarios, String nome){
+            for (Usuario u : usuarios){
+                if (u.getNome().equals(nome)){
+                        return true;
+                }
+            }		
+            return false;
+        }
+        
 	//Método principal do Servidor
 	public static void main(String[] args) {		
 		try {
@@ -249,7 +261,7 @@ public class Servidor {
                     System.out.println("Esperando conexão");
 			
                     try {
-                            int id = 0;
+                            
 
                             while (true) {
                                     //Espera clientes 
@@ -262,14 +274,19 @@ public class Servidor {
                                     String nome = in.readUTF();
                                     System.out.println("Mensagem Recebida: "+nome);
                                     nome = nome.replaceFirst(Protocolo.CHAT_INS, "");
+                                    Usuario u = new Usuario(socket, nome, id++);
                                     
+                                    //verifica se já existe usuário com mesmo nome
                                     //Cria um usuário para esta conexão
-                                    Usuario u = new Usuario(socket, nome, id++);				
+                                    if (existeUsuarioByNome(usuarioVector,nome)){
+                                        u.setNome(u.getNome()+"_"+u.getId());                                        
+                                        //Avisa Cliente seu novo login
+                                        Principal.alertaServidorIfLoginAlterado(u.getNome());	
+                                    }       
+                                    //Add usuário na lista do servidor
                                     usuarioVector.add(u);
-                                    
-                                    //Inicia Thread do servidor para este cliente
                                     ServidorThread c1 = new ServidorThread(socket);
-                                    c1.start();					
+                                    c1.start();                                    				
                             }				
                     } catch (Exception e) {
                             System.out.println("Servidor Exceção main()");

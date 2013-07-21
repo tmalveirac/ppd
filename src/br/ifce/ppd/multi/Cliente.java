@@ -39,9 +39,9 @@ public class Cliente {
                        }
                        tratarMensagemRecebida(data);
                } catch (Exception e) {
-                       System.out.println("Cliente Exceção Thread Ler");
-                       System.out.println("" + e.getMessage());
-                       e.printStackTrace();
+                       System.out.println("Cliente Exceção Thread Ler - Cliente Fechado");
+                       //System.out.println("" + e.getMessage());
+                       //e.printStackTrace();
                }
                super.run();
            }
@@ -95,20 +95,22 @@ public class Cliente {
     *
     * @return              void
     */
-    public void conectar(){
+    public void conectar(String servidor, String porta){
         try {
-            InetAddress endereco = InetAddress.getByName("localhost");
-            cliente = new Socket(endereco, 1024);
+            InetAddress endereco = InetAddress.getByName(servidor);
+            cliente = new Socket(endereco, Integer.parseInt(porta));
             in =  new DataInputStream(cliente.getInputStream());
-            out = new DataOutputStream(cliente.getOutputStream());
-            
+            out = new DataOutputStream(cliente.getOutputStream());           
         } catch (Exception e) {
             //Servidor fora do ar, avisa ao usuário
             Principal.alertaServidorOff();
         } 
         //Se conectou, inicia a thread
+        new ClienteLerThread().start();      
+    }
+    
+    public void iniciaThread (){
         new ClienteLerThread().start();
-       
     }
     
     /**
@@ -119,6 +121,15 @@ public class Cliente {
     * @return              void
     */
     public void enviarMensagemChat(String protocolo,String msg){
+        try {
+            out.writeUTF(protocolo+msg);
+            out.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     public void enviarTesteLogin(String protocolo,String msg){
         try {
             out.writeUTF(protocolo+msg);
             out.flush();

@@ -107,20 +107,34 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String login = txtLogin.getText();
-        //trata login vazio
-        if(login.equals("")){
-            JOptionPane.showMessageDialog(null,
-                "Login inválido. Tente novamente.",
-                "Atenção",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        String porta = txtPorta.getText();
+        String servidor = txtServidor.getText();
+        
+        //trata campos vazio
+        if (isCampoVazio(login)) return;
+        if (isCampoVazio(porta)) return;
+        if (isCampoVazio(servidor)) return;
+        
+        
         
         //Cria a janela proncipal, passando o login do usuário
-        new Principal(login); 
+        new Principal(login,servidor,porta); 
         setVisible(false);
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    public boolean isCampoVazio(String campo){
+         if(campo.equals("")){
+             JOptionPane.showMessageDialog(null,
+                campo + " inválido. Tente novamente.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+             return true;
+         }
+         else{
+             return false;
+         }           
+    }
+    
     public static void main(String args[]) {
       
         //Código gerado pelo Netbeans
