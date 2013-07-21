@@ -178,6 +178,7 @@ public class Servidor {
                         case Protocolo.CHAT_SAI:
                             
                             enviarMensagemParaUmUsuario(Protocolo.CHAT_SAI, "");
+                            enviarMensagemParaTodos(Protocolo.CHAT_MSG, usuarioBySocket(usuarioVector, cliente).getNome()+ " saiu." );
                             enviarMensagemParaTodos(Protocolo.CHAT_REM, usuarioBySocket(usuarioVector, cliente).getNome());
                             removeUsuario(usuarioVector, cliente);
                             
