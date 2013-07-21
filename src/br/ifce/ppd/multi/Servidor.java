@@ -40,7 +40,7 @@ public class Servidor {
 				//System.out.println("Tamanho da msg antigas: " + conversaVector.size());
 				
                                 //Envia lista de Login
-                                enviarMensagemParaTodos(Protocolo.CHAT_INS, null);
+                                enviarMensagemParaTodos(Protocolo.CHAT_INS, "");
                                 
 				//Envia toda a conversa antiga:
 				for (String s : conversaVector){
@@ -70,6 +70,7 @@ public class Servidor {
                 public void enviarMensagemParaUmUsuario(String protocolo, String msg){
                     try {
                         out.writeUTF(protocolo+msg);
+                        out.flush();
                     } catch (IOException ex) {
                         Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -94,9 +95,12 @@ public class Servidor {
                              }
                              
                              //Se for mensagem de Remoção de logins
-                             if (protocolo.equals(Protocolo.CHAT_SAI)){
+                             if (protocolo.equals(Protocolo.CHAT_REM)){
                                 for (Usuario u2 : usuarioVector) {
-                                    outData.writeUTF(protocolo+u2.getNome());
+                                    if (!u2.getNome().equals(msg)){
+                                        outData.writeUTF(protocolo+msg);
+                                    }
+                                    
                                  }
                                  continue;
                              }
@@ -174,10 +178,13 @@ public class Servidor {
                             
                         case Protocolo.CHAT_SAI:
                             
-                            enviarMensagemParaTodos(Protocolo.CHAT_SAI, usuarioBySocket(usuarioVector, cliente).getNome());
+                            enviarMensagemParaUmUsuario(Protocolo.CHAT_SAI, "");
+                            enviarMensagemParaTodos(Protocolo.CHAT_REM, usuarioBySocket(usuarioVector, cliente).getNome());
                             removeUsuario(usuarioVector, cliente);
-                            //enviarMensagemParaTodos(Protocolo.CHAT_INS, null); //Atualizar Lista de Logins
                             
+                            
+                            
+                          
                             System.out.println("Removeu Usuario ");
                             
                             break;

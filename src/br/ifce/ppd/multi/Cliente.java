@@ -87,13 +87,18 @@ public class Cliente {
                 payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
                 Principal.escreveMensagemChat(payLoad);
                 break;
-            
+                
             case Protocolo.CHAT_SAI:
-                //Desconectar cliente
-                payLoad = msg.replaceFirst(Protocolo.CHAT_SAI, "");
-                Principal.removeListaChat(payLoad);
-                desconectar();
+                //Desconectar um cliente
+                System.out.println("Cliente saiu: " + comando);
                 break;
+            
+                           
+            case Protocolo.CHAT_REM:
+                //Desconectar um cliente
+                payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
+                Principal.removeListaChat(payLoad);
+                break;    
                 
             default:
                 System.out.println("Case Default - MSG Recebida: " + comando);
@@ -121,6 +126,8 @@ public class Cliente {
             out.close();
             cliente.close();
         } catch (Exception e) {
+            System.out.println("Erro ao desconectar");
+            e.printStackTrace();
         }
 
     }
