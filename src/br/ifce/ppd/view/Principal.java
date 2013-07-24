@@ -8,10 +8,13 @@ package br.ifce.ppd.view;
  */
 
 import br.ifce.ppd.multi.*;
+import br.ifce.utils.Figura;
+import br.ifce.utils.FiguraFactory;
 import br.ifce.utils.Protocolo;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class Principal extends javax.swing.JFrame {
@@ -22,8 +25,11 @@ public class Principal extends javax.swing.JFrame {
         cliente = new Cliente();
         cliente.conectar(servidor,porta);
         cliente.enviarMensagemChat(Protocolo.CHAT_INS,login);   
-        
         this.login=login;
+        
+        //Teste Figuras
+       // Figuras.QUADRADO();
+        
         this.setVisible(true);
     }
     
@@ -115,14 +121,18 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        pnlChat = new javax.swing.JPanel();
         txtFieldChat = new javax.swing.JTextField();
         btnEnviarChat = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaChat = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         listViewChat = new javax.swing.JList();
-        jPanel2 = new javax.swing.JPanel();
+        pnlElementos = new javax.swing.JPanel();
+        labQuadrado = new javax.swing.JLabel();
+        labCirculo = new javax.swing.JLabel();
+        labTriangulo = new javax.swing.JLabel();
+        pnlAreaEdicao = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuSair = new javax.swing.JMenuItem();
@@ -130,8 +140,9 @@ public class Principal extends javax.swing.JFrame {
         menuAjuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Chat"));
+        pnlChat.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Chat", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
 
         txtFieldChat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,43 +165,99 @@ public class Principal extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(listViewChat);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlChatLayout = new javax.swing.GroupLayout(pnlChat);
+        pnlChat.setLayout(pnlChatLayout);
+        pnlChatLayout.setHorizontalGroup(
+            pnlChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlChatLayout.createSequentialGroup()
                 .addComponent(txtFieldChat)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEnviarChat))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(pnlChatLayout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+        pnlChatLayout.setVerticalGroup(
+            pnlChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlChatLayout.createSequentialGroup()
+                .addGroup(pnlChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFieldChat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEnviarChat)))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Objetos"));
+        pnlElementos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Objetos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        //labQuadrado = new JLabel(br.ifce.utils.FiguraFactory.QUADRADO());
+        labQuadrado.setIcon(br.ifce.utils.FiguraFactory.QUADRADO());
+        labQuadrado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labQuadradoMouseClicked(evt);
+            }
+        });
+        labQuadrado.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                labQuadradoMouseMoved(evt);
+            }
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                labQuadradoMouseDragged(evt);
+            }
+        });
+
+        labCirculo.setIcon(br.ifce.utils.FiguraFactory.CIRCULO());
+        labCirculo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labCirculoMouseClicked(evt);
+            }
+        });
+        labCirculo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                labCirculoMouseDragged(evt);
+            }
+        });
+
+        labTriangulo.setIcon(br.ifce.utils.FiguraFactory.TRIANGULO());
+        labTriangulo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labTrianguloMouseClicked(evt);
+            }
+        });
+        labTriangulo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                labTrianguloMouseDragged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlElementosLayout = new javax.swing.GroupLayout(pnlElementos);
+        pnlElementos.setLayout(pnlElementosLayout);
+        pnlElementosLayout.setHorizontalGroup(
+            pnlElementosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlElementosLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(pnlElementosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(labCirculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labTriangulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labQuadrado))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        pnlElementosLayout.setVerticalGroup(
+            pnlElementosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlElementosLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(labQuadrado)
+                .addGap(62, 62, 62)
+                .addComponent(labCirculo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
+                .addComponent(labTriangulo)
+                .addGap(69, 69, 69))
         );
+
+        pnlAreaEdicao.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Área de Edição", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        pnlAreaEdicao.setLayout(null);
 
         jMenu1.setText("Arquivo");
 
@@ -218,15 +285,18 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 546, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlElementos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlAreaEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlChat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlElementos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlAreaEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -245,6 +315,48 @@ public class Principal extends javax.swing.JFrame {
         //Finaliza o cliente
         sair();
     }//GEN-LAST:event_menuSairActionPerformed
+
+    private void labQuadradoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_labQuadradoMouseMoved
+
+    private void labQuadradoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseDragged
+        
+
+    }//GEN-LAST:event_labQuadradoMouseDragged
+
+    private void labCirculoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labCirculoMouseDragged
+        
+    }//GEN-LAST:event_labCirculoMouseDragged
+
+    private void labTrianguloMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labTrianguloMouseDragged
+        
+    }//GEN-LAST:event_labTrianguloMouseDragged
+
+    private void labQuadradoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseClicked
+        
+        if (evt.getClickCount() == 2) {
+            Figura f = new Figura(FiguraFactory.QUADRADO());
+            pnlAreaEdicao.add(f);
+            pnlAreaEdicao.repaint();
+        }
+    }//GEN-LAST:event_labQuadradoMouseClicked
+
+    private void labCirculoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labCirculoMouseClicked
+       if (evt.getClickCount() == 2) {
+            Figura f = new Figura(FiguraFactory.CIRCULO());
+            pnlAreaEdicao.add(f);
+            pnlAreaEdicao.repaint();
+        }
+    }//GEN-LAST:event_labCirculoMouseClicked
+
+    private void labTrianguloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labTrianguloMouseClicked
+        if (evt.getClickCount() == 2) {
+            Figura f = new Figura(FiguraFactory.TRIANGULO());
+            pnlAreaEdicao.add(f);
+            pnlAreaEdicao.repaint();
+        }
+    }//GEN-LAST:event_labTrianguloMouseClicked
     
     /**
     * Envia uma mensagem de saída para o Servidor e termina 
@@ -308,14 +420,18 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnEnviarChat;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labCirculo;
+    private javax.swing.JLabel labQuadrado;
+    private javax.swing.JLabel labTriangulo;
     private static javax.swing.JList listViewChat;
     private javax.swing.JMenu menuAjuda;
     private javax.swing.JMenuItem menuSair;
     private javax.swing.JMenu menuSobre;
+    public static javax.swing.JPanel pnlAreaEdicao;
+    private javax.swing.JPanel pnlChat;
+    private javax.swing.JPanel pnlElementos;
     private static javax.swing.JTextArea txtAreaChat;
     private javax.swing.JTextField txtFieldChat;
     // End of variables declaration//GEN-END:variables
