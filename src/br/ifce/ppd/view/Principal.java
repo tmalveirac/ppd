@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
@@ -376,8 +377,6 @@ public class Principal extends javax.swing.JFrame {
                     apagar.addActionListener(new ActionListener() {  
                         @Override
                         public void actionPerformed(ActionEvent ae) {  
-                            //pnlAreaEdicao.remove(f);
-                            //pnlAreaEdicao.repaint();
                             cliente.enviarMensagemEdicao(Protocolo.IMG_REMO, 
                                     ""+f.getId());
                         }  
@@ -409,6 +408,44 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         
+        f.addMouseMotionListener(new MouseMotionListener() {
+
+            @Override
+            public void mouseDragged(MouseEvent me) {
+                int x = (me.getX() + f.getBounds().x) - 10 / 2;
+                int y = (me.getY() + f.getBounds().y) - 10 / 2;
+                
+                String payload = f.getId()+":"+x+":"+y;  //Formato: id:x:y: -> 10:2:3 
+                cliente.enviarMensagemEdicao(Protocolo.IMG_MOVE, payload);                
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent me) {
+                
+            }
+        });    
+    }
+    
+    
+    public static void moverFiguraAreaEdicao(int id, int x, int y){
+         for (Figura f : figuraVector){
+            if (f.getId()==id){
+                 
+                if (x > pnlAreaEdicao.getBounds().width - 55) {
+                    x = pnlAreaEdicao.getBounds().width - 55;
+                } else if (x < 5) {
+                    x = 5;
+                }
+                if (y > pnlAreaEdicao.getBounds().height - 55) {
+                    y = pnlAreaEdicao.getBounds().height - 55;
+                } else if (y < 15) {
+                    y = 15;
+                }
+                
+                f.setLocation(x, y);
+            }
+           
+        }
     }
     
     public static int indiceByIdFigura(int id){

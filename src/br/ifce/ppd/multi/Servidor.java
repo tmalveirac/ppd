@@ -213,6 +213,11 @@ public class Servidor {
                         removeImagem(imagemVector, Integer.parseInt(payLoad));
                         System.out.println("Removeu Figura id= " + payLoad);  
                         break;
+                        
+                    case Protocolo.IMG_MOVE:
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_MOVE, payLoad);
+                        System.out.println("Mover figura");
+                        break;
 
                     default:
                         System.out.println("Case Default - MSG Recebida: " + comando);

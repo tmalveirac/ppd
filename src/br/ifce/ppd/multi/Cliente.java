@@ -105,6 +105,12 @@ public class Cliente {
                 System.out.println("Remover figura id=" + payLoad);
                 break;
                 
+            case Protocolo.IMG_MOVE:
+                String campo[] = payLoad.split(":");
+                Principal.moverFiguraAreaEdicao(Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
+                System.out.println("Movendo Figura id=" + campo[0]);
+                break;
+                
             default:
                 System.out.println("Case Default - MSG Recebida: " + comando);                
         }        
