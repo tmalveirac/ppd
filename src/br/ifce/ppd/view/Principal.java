@@ -11,8 +11,10 @@ import br.ifce.ppd.multi.*;
 import br.ifce.utils.Figura;
 import br.ifce.utils.FiguraFactory;
 import br.ifce.utils.Protocolo;
+import br.ifce.utils.TipoFigura;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -325,34 +327,57 @@ public class Principal extends javax.swing.JFrame {
     
     
     
-    public static void criarFiguraAreaEdicao(String figura){
+    public static void criarFiguraAreaEdicao(int tipoFigura, int id){
         Figura f;
         
-        switch(figura){        
-            case Protocolo.IMG_CQUA:
-                f = new Figura(FiguraFactory.QUADRADO());
+        switch(tipoFigura){        
+            case TipoFigura.QUADRADO:
+                f = new Figura(FiguraFactory.QUADRADO(), id);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
+                figuraVertor.add(f);
                 break;
                 
-            case Protocolo.IMG_CCIR:
-                f = new Figura(FiguraFactory.CIRCULO());
+            case TipoFigura.CIRCULO:
+                f = new Figura(FiguraFactory.CIRCULO(), id);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
+                figuraVertor.add(f);
                 break;
                 
-            case Protocolo.IMG_CTRI:
-                f = new Figura(FiguraFactory.TRIANGULO());
+            case TipoFigura.TRIANGULO:
+                f = new Figura(FiguraFactory.TRIANGULO(), id);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
+                figuraVertor.add(f);
                 break;
         }
-        
     }  
     
+    public void addEventosFigura(Figura f){
+        
+    }
     
     
     
+    public static void removerFiguraAreaEdicao(int id){
+        int indiceFiguraRemovida=-1; 
+        int i=0;
+        
+        for (Figura f : figuraVertor){
+            if (f.getId() == id){
+                indiceFiguraRemovida=i;
+                break;
+            }
+            i++;
+        }
+            
+        if (indiceFiguraRemovida!=-1){
+//            cliente.enviarMensagemEdicao(Protocolo.IMG_RQUA, 
+//                    ""+figuraVertor.get(indiceFiguraRemovida).getId());
+            figuraVertor.remove(indiceFiguraRemovida);
+        }
+    } 
     
     
     
@@ -444,4 +469,5 @@ public class Principal extends javax.swing.JFrame {
     private String login;
     //Model utilizado para atualizar lista de logins na tela
     private static DefaultListModel  listModel = new DefaultListModel();    
+    private static Vector<Figura> figuraVertor = new Vector<Figura>();
 }

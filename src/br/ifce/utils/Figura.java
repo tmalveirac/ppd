@@ -4,8 +4,8 @@
  */
 package br.ifce.utils;
 
+import br.ifce.ppd.multi.Cliente;
 import br.ifce.ppd.view.Principal;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.ImageIcon;
-import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -27,15 +26,19 @@ public class Figura extends JLabel{
     
     private ImageIcon imageIcon;
     private JPanel jPanel;
+    private Cliente cliente;
+    private int id;
     
-    public Figura (ImageIcon imageIcon){
+    public Figura (ImageIcon imageIcon, int id){
         this.imageIcon = imageIcon;
         this.jPanel = Principal.pnlAreaEdicao;
+        this.id=id;
         setIcon(imageIcon);
         setBounds(10, 10, 50, 50);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         addMouseMotionListener(getMouseMotionListener());
         addMouseListener(getMouseListener());
+        
         
     }
     
@@ -82,6 +85,7 @@ public class Figura extends JLabel{
                         public void actionPerformed(ActionEvent ae) {  
                             jPanel.remove(Figura.this);
                             jPanel.repaint();
+                            
                         }  
                     });  
                     menu.add(apagar); 
@@ -112,6 +116,15 @@ public class Figura extends JLabel{
         };
         
         return mouseListener;
+    }
+    
+    public void removerFigura(){
+        jPanel.remove(Figura.this);
+        jPanel.repaint();
+    }
+
+    public int getId() {
+        return id;
     }
     
 }

@@ -9,6 +9,7 @@ package br.ifce.ppd.multi;
 
 import br.ifce.ppd.view.Principal;
 import br.ifce.utils.Protocolo;
+import br.ifce.utils.TipoFigura;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -53,22 +54,22 @@ public class Cliente {
     */
     public void tratarMensagemRecebida(String msg){        
         String comando = msg.substring(0, 8); //Pega o comando 
-        String payLoad;
+        String payLoad = msg.replace(comando, "");
         
         switch (comando){
             
             case Protocolo.CHAT_INS:
-                payLoad = msg.replaceFirst(Protocolo.CHAT_INS, "");
+//                payLoad = msg.replaceFirst(Protocolo.CHAT_INS, "");
                 Principal.insereListaChat(payLoad);
                 break;
             
             case Protocolo.CHAT_MSG:
-                payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
+//                payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
                 Principal.escreveMensagemChat(payLoad);                
                 break;
             
             case Protocolo.CHAT_NOT:                
-                payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
+//                payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
                 Principal.escreveMensagemChat(payLoad);
                 break;
                 
@@ -79,23 +80,23 @@ public class Cliente {
             
             case Protocolo.CHAT_REM:
                 //Excluir um cliente
-                payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
+//                payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
                 Principal.removeListaChat(payLoad);
                 break;    
                 
             case Protocolo.IMG_CQUA:
                 //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CQUA);
+                Principal.criarFiguraAreaEdicao(TipoFigura.QUADRADO, Integer.parseInt(payLoad));
                 break;
                 
             case Protocolo.IMG_CCIR:
                 //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CCIR);
+                Principal.criarFiguraAreaEdicao(TipoFigura.CIRCULO, Integer.parseInt(payLoad));
                 break;
                 
             case Protocolo.IMG_CTRI:
                 //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CTRI);
+                Principal.criarFiguraAreaEdicao(TipoFigura.TRIANGULO, Integer.parseInt(payLoad));
                 break;
                 
             default:

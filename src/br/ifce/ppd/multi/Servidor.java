@@ -8,7 +8,9 @@ package br.ifce.ppd.multi;
  */
 
 import br.ifce.ppd.view.Principal;
+import br.ifce.utils.Imagem;
 import br.ifce.utils.Protocolo;
+import br.ifce.utils.TipoFigura;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,7 +29,11 @@ public class Servidor {
         private static Vector<String> conversaVector = new Vector<String>();
         // Id dos usuários: incremental - Usado para tratar login repetido, concatenando com seu ID
         private static int id = 0;
-	
+	// Id das imagens, utilizado para identificar as imagens criadas
+        private static int idImg = 0;
+        // Vetor que armazena as figuras ativas da área de edição
+        private static Vector<Imagem> figuraVector = new Vector<Imagem>();
+        
         //Thread Servidor
 	private static class ServidorThread extends Thread {
 
@@ -129,8 +135,7 @@ public class Servidor {
                 for (Usuario u : usuarioVector){                                              
                     try {                            
                          DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
-
-                             
+                  
                          //Envia
                          outData.writeUTF(protocolo+msg);
                     } catch (IOException ex) {
@@ -181,18 +186,29 @@ public class Servidor {
                         
                         
                     case Protocolo.IMG_CQUA:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, "");  
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, ""+idImg);  
+                        Imagem quadrado = new Imagem(idImg++, TipoFigura.QUADRADO, 10, 10);
+                        figuraVector.add(quadrado);
                         System.out.println("Criar Quadrado");   
                         break;
 
                     case Protocolo.IMG_CCIR:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""); 
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""+idImg); 
+                        Imagem circulo = new Imagem(idImg++, TipoFigura.CIRCULO, 10, 10);
+                        figuraVector.add(circulo);
                         System.out.println("Removeu Circulo ");   
+                       
                         break;
                         
                     case Protocolo.IMG_CTRI:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""); 
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""+idImg); 
+                        Imagem triangulo = new Imagem(idImg++, TipoFigura.TRIANGULO, 10, 10);
+                        figuraVector.add(triangulo);
                         System.out.println("Criar Triangulo ");   
+                        break;
+                        
+                    case Protocolo.IMG_RQUA:
+                        
                         break;
 
                     default:
