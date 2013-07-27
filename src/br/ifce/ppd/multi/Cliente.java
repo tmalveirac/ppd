@@ -83,6 +83,21 @@ public class Cliente {
                 Principal.removeListaChat(payLoad);
                 break;    
                 
+            case Protocolo.IMG_CQUA:
+                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
+                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CQUA);
+                break;
+                
+            case Protocolo.IMG_CCIR:
+                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
+                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CCIR);
+                break;
+                
+            case Protocolo.IMG_CTRI:
+                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
+                Principal.criarFiguraAreaEdicao(Protocolo.IMG_CTRI);
+                break;
+                
             default:
                 System.out.println("Case Default - MSG Recebida: " + comando);                
         }        
@@ -126,4 +141,15 @@ public class Cliente {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    public void enviarMensagemEdicao(String protocolo,String msg){
+        try {
+            out.writeUTF(protocolo+msg);
+            out.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

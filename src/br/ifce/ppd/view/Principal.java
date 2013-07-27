@@ -199,24 +199,11 @@ public class Principal extends javax.swing.JFrame {
                 labQuadradoMouseClicked(evt);
             }
         });
-        labQuadrado.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                labQuadradoMouseMoved(evt);
-            }
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                labQuadradoMouseDragged(evt);
-            }
-        });
 
         labCirculo.setIcon(br.ifce.utils.FiguraFactory.CIRCULO());
         labCirculo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labCirculoMouseClicked(evt);
-            }
-        });
-        labCirculo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                labCirculoMouseDragged(evt);
             }
         });
 
@@ -226,24 +213,16 @@ public class Principal extends javax.swing.JFrame {
                 labTrianguloMouseClicked(evt);
             }
         });
-        labTriangulo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                labTrianguloMouseDragged(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlElementosLayout = new javax.swing.GroupLayout(pnlElementos);
         pnlElementos.setLayout(pnlElementosLayout);
         pnlElementosLayout.setHorizontalGroup(
             pnlElementosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlElementosLayout.createSequentialGroup()
+                .addGap(57, 57, 57)
                 .addGroup(pnlElementosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlElementosLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(labCirculo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlElementosLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(labQuadrado, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(labCirculo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labQuadrado, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlElementosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -305,7 +284,7 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(pnlAreaEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlElementos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
@@ -325,47 +304,61 @@ public class Principal extends javax.swing.JFrame {
         sair();
     }//GEN-LAST:event_menuSairActionPerformed
 
-    private void labQuadradoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_labQuadradoMouseMoved
-
-    private void labQuadradoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseDragged
-        
-
-    }//GEN-LAST:event_labQuadradoMouseDragged
-
-    private void labCirculoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labCirculoMouseDragged
-        
-    }//GEN-LAST:event_labCirculoMouseDragged
-
-    private void labTrianguloMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labTrianguloMouseDragged
-        
-    }//GEN-LAST:event_labTrianguloMouseDragged
-
     private void labQuadradoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labQuadradoMouseClicked
         
-        if (evt.getClickCount() == 2) {
-            Figura f = new Figura(FiguraFactory.QUADRADO());
-            pnlAreaEdicao.add(f);
-            pnlAreaEdicao.repaint();
+        if (evt.getClickCount() == 2) {  
+            cliente.enviarMensagemEdicao(Protocolo.IMG_CQUA, "");
         }
     }//GEN-LAST:event_labQuadradoMouseClicked
 
     private void labCirculoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labCirculoMouseClicked
-       if (evt.getClickCount() == 2) {
-            Figura f = new Figura(FiguraFactory.CIRCULO());
-            pnlAreaEdicao.add(f);
-            pnlAreaEdicao.repaint();
+       if (evt.getClickCount() == 2) {           
+            cliente.enviarMensagemEdicao(Protocolo.IMG_CCIR, "");
         }
     }//GEN-LAST:event_labCirculoMouseClicked
 
     private void labTrianguloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labTrianguloMouseClicked
         if (evt.getClickCount() == 2) {
-            Figura f = new Figura(FiguraFactory.TRIANGULO());
-            pnlAreaEdicao.add(f);
-            pnlAreaEdicao.repaint();
+            cliente.enviarMensagemEdicao(Protocolo.IMG_CTRI, "");
         }
     }//GEN-LAST:event_labTrianguloMouseClicked
+    
+    
+    
+    public static void criarFiguraAreaEdicao(String figura){
+        Figura f;
+        
+        switch(figura){        
+            case Protocolo.IMG_CQUA:
+                f = new Figura(FiguraFactory.QUADRADO());
+                pnlAreaEdicao.add(f);
+                pnlAreaEdicao.repaint();
+                break;
+                
+            case Protocolo.IMG_CCIR:
+                f = new Figura(FiguraFactory.CIRCULO());
+                pnlAreaEdicao.add(f);
+                pnlAreaEdicao.repaint();
+                break;
+                
+            case Protocolo.IMG_CTRI:
+                f = new Figura(FiguraFactory.TRIANGULO());
+                pnlAreaEdicao.add(f);
+                pnlAreaEdicao.repaint();
+                break;
+        }
+        
+    }  
+    
+    
+    
+    
+    
+    
+    
+    
+//    ________________________________________________________________________
+    
     
     /**
     * Envia uma mensagem de saída para o Servidor e termina 
@@ -424,6 +417,9 @@ public class Principal extends javax.swing.JFrame {
             }      
         });   
     }
+    
+    
+    
         
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarChat;

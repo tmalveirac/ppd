@@ -44,7 +44,7 @@ public class Servidor {
                             out = new DataOutputStream(cliente.getOutputStream());
 
                             //Envia lista de Login
-                            enviarMensagemParaTodos(Protocolo.CHAT_INS, "");
+                            enviarMensagemParaTodosChat(Protocolo.CHAT_INS, "");
 
                             //Envia toda a conversa antiga:
                             for (String s : conversaVector){
@@ -59,7 +59,7 @@ public class Servidor {
 
                             //Envia Notificação para todos
                             String notificacao = usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de entrar.";
-                            enviarMensagemParaTodos(Protocolo.CHAT_NOT, notificacao);
+                            enviarMensagemParaTodosChat(Protocolo.CHAT_NOT, notificacao);
                             //Envia a mensagem Bem vindo para o cliente!
                             String bemvindo = "Bem vindo " + usuarioBySocket(usuarioVector, cliente).getNome() + "!";
                             enviarMensagemParaUmUsuario(Protocolo.CHAT_MSG, bemvindo);
@@ -93,7 +93,7 @@ public class Servidor {
              * @param msg           mensagem a ser enviada
              * @return              void
              */
-            public void enviarMensagemParaTodos(String protocolo, String msg){                    
+            public void enviarMensagemParaTodosChat(String protocolo, String msg){                    
                 for (Usuario u : usuarioVector){                                              
                     try {                            
                          DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
@@ -123,6 +123,24 @@ public class Servidor {
                     } 
                 }
             }
+            
+            
+            public void enviarMensagemParaTodosEdicao(String protocolo, String msg){                    
+                for (Usuario u : usuarioVector){                                              
+                    try {                            
+                         DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
+
+                             
+                         //Envia
+                         outData.writeUTF(protocolo+msg);
+                    } catch (IOException ex) {
+                        System.out.println("Servidor Exceção enviarMensagemParaTodos()");
+                        Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                }
+            }
+            
+            
 
             /**
             * Trata a mensagem recebida
@@ -132,7 +150,7 @@ public class Servidor {
             */    
             public void tratarMensagemRecebida(String msg){
                 String comando = msg.substring(0, 8); //Extrai o comando 
-                String payLoad;
+                String payLoad = msg.replaceFirst(comando, "");
 
                 // Trata a mensagem conforme o protocolo
                 switch (comando){
@@ -142,10 +160,10 @@ public class Servidor {
                         break;
 
                     case Protocolo.CHAT_MSG:
-                        payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
+//                        payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
                         String data;
                         data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + payLoad;
-                        enviarMensagemParaTodos(Protocolo.CHAT_MSG, data);
+                        enviarMensagemParaTodosChat(Protocolo.CHAT_MSG, data);
                         break;
 
                     case Protocolo.CHAT_NOT:
@@ -155,10 +173,26 @@ public class Servidor {
                     case Protocolo.CHAT_SAI:                          
                         enviarMensagemParaUmUsuario(Protocolo.CHAT_SAI, "");
                         String notificacao = usuarioBySocket(usuarioVector, cliente).getNome() + " acabou de sair.";
-                        enviarMensagemParaTodos(Protocolo.CHAT_NOT, notificacao);
-                        enviarMensagemParaTodos(Protocolo.CHAT_REM, usuarioBySocket(usuarioVector, cliente).getNome());
+                        enviarMensagemParaTodosChat(Protocolo.CHAT_NOT, notificacao);
+                        enviarMensagemParaTodosChat(Protocolo.CHAT_REM, usuarioBySocket(usuarioVector, cliente).getNome());
                         removeUsuario(usuarioVector, cliente);
                         System.out.println("Removeu Usuario ");                           
+                        break;
+                        
+                        
+                    case Protocolo.IMG_CQUA:
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, "");  
+                        System.out.println("Criar Quadrado");   
+                        break;
+
+                    case Protocolo.IMG_CCIR:
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""); 
+                        System.out.println("Removeu Circulo ");   
+                        break;
+                        
+                    case Protocolo.IMG_CTRI:
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""); 
+                        System.out.println("Criar Triangulo ");   
                         break;
 
                     default:

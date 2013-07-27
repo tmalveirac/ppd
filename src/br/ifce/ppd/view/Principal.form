@@ -75,7 +75,7 @@
           <Component id="pnlAreaEdicao" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <Component id="pnlElementos" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -191,15 +191,10 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace min="57" pref="57" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                          <Component id="labCirculo" min="-2" pref="50" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                          <Component id="labQuadrado" min="-2" pref="50" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="labCirculo" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="labQuadrado" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="57" max="32767" attributes="0"/>
               </Group>
@@ -228,8 +223,6 @@
         <Component class="javax.swing.JLabel" name="labQuadrado">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="labQuadradoMouseClicked"/>
-            <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="labQuadradoMouseMoved"/>
-            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="labQuadradoMouseDragged"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="//labQuadrado = new JLabel(br.ifce.utils.FiguraFactory.QUADRADO());&#xa;labQuadrado.setIcon(br.ifce.utils.FiguraFactory.QUADRADO());"/>
@@ -238,7 +231,6 @@
         <Component class="javax.swing.JLabel" name="labCirculo">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="labCirculoMouseClicked"/>
-            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="labCirculoMouseDragged"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="labCirculo.setIcon(br.ifce.utils.FiguraFactory.CIRCULO());"/>
@@ -247,7 +239,6 @@
         <Component class="javax.swing.JLabel" name="labTriangulo">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="labTrianguloMouseClicked"/>
-            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="labTrianguloMouseDragged"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="labTriangulo.setIcon(br.ifce.utils.FiguraFactory.TRIANGULO());"/>
