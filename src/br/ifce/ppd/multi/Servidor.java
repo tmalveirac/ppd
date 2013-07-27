@@ -57,11 +57,30 @@ public class Servidor {
                             for (String s : conversaVector){
                                     enviarMensagemParaUmUsuario(Protocolo.CHAT_MSG, s);
                             }
-
+                           
                             //Se há mensagens antigas, envia a mensagem abaixo para separar
                             if (conversaVector.size()>0){
-                                    enviarMensagemParaUmUsuario(Protocolo.CHAT_MSG, "---Mensagens antigas acima---");
-
+                                enviarMensagemParaUmUsuario(Protocolo.CHAT_MSG, "---Mensagens antigas acima---");
+                            }
+                            
+                            //Envia mensagem para a criação das figuras previamente criadas
+                            for (Imagem img : imagemVector){
+                                String payload = ""+img.getId()+ ":"+img.getPosX()+ ":"+img.getPosY();
+                                
+                                switch(img.getTipoFigura()){
+                         
+                                    case TipoFigura.QUADRADO:
+                                        enviarMensagemParaUmUsuario(Protocolo.IMG_CQUA, payload);
+                                        break;
+                                        
+                                    case TipoFigura.CIRCULO:
+                                        enviarMensagemParaUmUsuario(Protocolo.IMG_CCIR, payload);
+                                        break;
+                                        
+                                    case TipoFigura.TRIANGULO:
+                                        enviarMensagemParaUmUsuario(Protocolo.IMG_CTRI, payload);
+                                        break;
+                                }
                             }
 
                             //Envia Notificação para todos
@@ -133,16 +152,16 @@ public class Servidor {
             
             
             public void enviarMensagemParaTodosEdicao(String protocolo, String msg){                    
-                for (Usuario u : usuarioVector){                                              
+                for (Usuario u : usuarioVector){                                         
                     try {                            
-                         DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
-                  
-                         //Envia
-                         outData.writeUTF(protocolo+msg);
+                             DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
+
+                            //Envia
+                            outData.writeUTF(protocolo+msg);
                     } catch (IOException ex) {
-                        System.out.println("Servidor Exceção enviarMensagemParaTodos()");
-                        Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                           System.out.println("Servidor Exceção enviarMensagemParaTodos()");
+                           Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }     
                 }
             }
             
@@ -187,14 +206,14 @@ public class Servidor {
                         
                         
                     case Protocolo.IMG_CQUA:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, ""+idImg);  
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, ""+idImg+":10"+":10");  
                         Imagem quadrado = new Imagem(idImg++, TipoFigura.QUADRADO, 10, 10);
                         imagemVector.add(quadrado);
                         System.out.println("Criar Quadrado");   
                         break;
 
                     case Protocolo.IMG_CCIR:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""+idImg); 
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""+idImg+":10"+":10"); 
                         Imagem circulo = new Imagem(idImg++, TipoFigura.CIRCULO, 10, 10);
                         imagemVector.add(circulo);
                         System.out.println("Removeu Circulo ");   
@@ -202,7 +221,7 @@ public class Servidor {
                         break;
                         
                     case Protocolo.IMG_CTRI:
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""+idImg); 
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""+idImg+":10"+":10"); 
                         Imagem triangulo = new Imagem(idImg++, TipoFigura.TRIANGULO, 10, 10);
                         imagemVector.add(triangulo);
                         System.out.println("Criar Triangulo ");   
@@ -215,12 +234,24 @@ public class Servidor {
                         break;
                         
                     case Protocolo.IMG_MOVE:
+                        String campo[] = payLoad.split(":"); //pega id, posX e posY da figura
+                        atualizaPosicaoImagem(Integer.parseInt(campo[0]), Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_MOVE, payLoad);
+                        
                         System.out.println("Mover figura");
                         break;
 
                     default:
                         System.out.println("Case Default - MSG Recebida: " + comando);
+                }
+            }
+            
+            public void atualizaPosicaoImagem(int id, int x, int y){
+                for (Imagem img : imagemVector){
+                    if (img.getId()==id){
+                        img.setPosX(x);
+                        img.setPosY(y);
+                    }
                 }
             }
               

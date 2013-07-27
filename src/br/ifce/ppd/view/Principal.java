@@ -334,12 +334,12 @@ public class Principal extends javax.swing.JFrame {
     
     
     
-    public static void criarFiguraAreaEdicao(int tipoFigura, int id){
+    public static void criarFiguraAreaEdicao(int tipoFigura, int id, int x, int y){
         Figura f;
         
         switch(tipoFigura){        
             case TipoFigura.QUADRADO:
-                f = new Figura(FiguraFactory.QUADRADO(), id);
+                f = new Figura(FiguraFactory.QUADRADO(), id, x, y);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
                 figuraVector.add(f);
@@ -347,7 +347,7 @@ public class Principal extends javax.swing.JFrame {
                 break;
                 
             case TipoFigura.CIRCULO:
-                f = new Figura(FiguraFactory.CIRCULO(), id);
+                f = new Figura(FiguraFactory.CIRCULO(), id, x, y);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
                 figuraVector.add(f);
@@ -355,7 +355,7 @@ public class Principal extends javax.swing.JFrame {
                 break;
                 
             case TipoFigura.TRIANGULO:
-                f = new Figura(FiguraFactory.TRIANGULO(), id);
+                f = new Figura(FiguraFactory.TRIANGULO(), id, x, y);
                 
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
@@ -376,7 +376,7 @@ public class Principal extends javax.swing.JFrame {
                     JMenuItem apagar = new JMenuItem("Apagar");  
                     apagar.addActionListener(new ActionListener() {  
                         @Override
-                        public void actionPerformed(ActionEvent ae) {  
+                        public void actionPerformed(ActionEvent ae) {       
                             cliente.enviarMensagemEdicao(Protocolo.IMG_REMO, 
                                     ""+f.getId());
                         }  
@@ -415,6 +415,7 @@ public class Principal extends javax.swing.JFrame {
                 int x = (me.getX() + f.getBounds().x) - 10 / 2;
                 int y = (me.getY() + f.getBounds().y) - 10 / 2;
                 
+                //moverFiguraAreaEdicao(f.getId(), x, y); // Se o servidor não manda pra mim
                 String payload = f.getId()+":"+x+":"+y;  //Formato: id:x:y: -> 10:2:3 
                 cliente.enviarMensagemEdicao(Protocolo.IMG_MOVE, payload);                
             }

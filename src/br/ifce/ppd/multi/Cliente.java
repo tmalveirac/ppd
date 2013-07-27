@@ -56,6 +56,7 @@ public class Cliente {
     public void tratarMensagemRecebida(String msg){        
         String comando = msg.substring(0, 8); //Pega o comando 
         String payLoad = msg.replace(comando, "");
+        String campo[];
         
         switch (comando){
             
@@ -86,18 +87,18 @@ public class Cliente {
                 break;    
                 
             case Protocolo.IMG_CQUA:
-                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(TipoFigura.QUADRADO, Integer.parseInt(payLoad));
+                campo = payLoad.split(":");
+                Principal.criarFiguraAreaEdicao(TipoFigura.QUADRADO, Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
                 break;
                 
             case Protocolo.IMG_CCIR:
-                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(TipoFigura.CIRCULO, Integer.parseInt(payLoad));
+                campo = payLoad.split(":");
+                Principal.criarFiguraAreaEdicao(TipoFigura.CIRCULO, Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
                 break;
                 
             case Protocolo.IMG_CTRI:
-                //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
-                Principal.criarFiguraAreaEdicao(TipoFigura.TRIANGULO, Integer.parseInt(payLoad));
+                campo = payLoad.split(":");
+                Principal.criarFiguraAreaEdicao(TipoFigura.TRIANGULO, Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
                 break;
                 
             case Protocolo.IMG_REMO:
@@ -106,7 +107,7 @@ public class Cliente {
                 break;
                 
             case Protocolo.IMG_MOVE:
-                String campo[] = payLoad.split(":");
+                campo = payLoad.split(":");
                 Principal.moverFiguraAreaEdicao(Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
                 System.out.println("Movendo Figura id=" + campo[0]);
                 break;

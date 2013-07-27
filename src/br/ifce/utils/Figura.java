@@ -29,15 +29,16 @@ public class Figura extends JLabel{
     private Cliente cliente;
     private int id;
     
-    public Figura (ImageIcon imageIcon, int id){
+    public Figura (ImageIcon imageIcon, int id, int x, int y){
         this.imageIcon = imageIcon;
         this.jPanel = Principal.pnlAreaEdicao;
         this.id=id;
         setIcon(imageIcon);
-        setBounds(10, 10, 50, 50);
+        //setBounds(10, 10, 50, 50);
+        setBounds(x, y, 50, 50);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-        addMouseMotionListener(getMouseMotionListener());
-        addMouseListener(getMouseListener());
+        //addMouseMotionListener(getMouseMotionListener());
+        //addMouseListener(getMouseListener());
         
         
     }
