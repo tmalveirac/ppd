@@ -24,9 +24,7 @@ public class Protocolo {
     public static final String IMG_CTRI = "IMG_CTRI"; //Cria um triângulo
     public static final String IMG_CCIR = "IMG_CCIR"; //Cria um círculo
     
-    public static final String IMG_RQUA = "IMG_RQUA"; //Remove um quadrado
-    public static final String IMG_RTRI = "IMG_RTRI"; //Remove um triângulo
-    public static final String IMG_RCIR = "IMG_RCIR"; //Remove um círculo
+    public static final String IMG_REMO = "IMG_RQUA"; //Remove uma figura
     
     public static final String IMG_MQUA = "IMG_MQUA"; //Move um quadrado
     public static final String IMG_MTRI = "IMG_MTRI"; //Move um triângulo

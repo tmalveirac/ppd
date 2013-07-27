@@ -8,6 +8,7 @@ package br.ifce.ppd.multi;
  */
 
 import br.ifce.ppd.view.Principal;
+import br.ifce.utils.Figura;
 import br.ifce.utils.Imagem;
 import br.ifce.utils.Protocolo;
 import br.ifce.utils.TipoFigura;
@@ -32,7 +33,7 @@ public class Servidor {
 	// Id das imagens, utilizado para identificar as imagens criadas
         private static int idImg = 0;
         // Vetor que armazena as figuras ativas da área de edição
-        private static Vector<Imagem> figuraVector = new Vector<Imagem>();
+        private static Vector<Imagem> imagemVector = new Vector<Imagem>();
         
         //Thread Servidor
 	private static class ServidorThread extends Thread {
@@ -188,14 +189,14 @@ public class Servidor {
                     case Protocolo.IMG_CQUA:
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, ""+idImg);  
                         Imagem quadrado = new Imagem(idImg++, TipoFigura.QUADRADO, 10, 10);
-                        figuraVector.add(quadrado);
+                        imagemVector.add(quadrado);
                         System.out.println("Criar Quadrado");   
                         break;
 
                     case Protocolo.IMG_CCIR:
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""+idImg); 
                         Imagem circulo = new Imagem(idImg++, TipoFigura.CIRCULO, 10, 10);
-                        figuraVector.add(circulo);
+                        imagemVector.add(circulo);
                         System.out.println("Removeu Circulo ");   
                        
                         break;
@@ -203,12 +204,14 @@ public class Servidor {
                     case Protocolo.IMG_CTRI:
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_CTRI, ""+idImg); 
                         Imagem triangulo = new Imagem(idImg++, TipoFigura.TRIANGULO, 10, 10);
-                        figuraVector.add(triangulo);
+                        imagemVector.add(triangulo);
                         System.out.println("Criar Triangulo ");   
                         break;
                         
-                    case Protocolo.IMG_RQUA:
-                        
+                    case Protocolo.IMG_REMO:
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_REMO, ""+payLoad);
+                        removeImagem(imagemVector, Integer.parseInt(payLoad));
+                        System.out.println("Removeu Figura id= " + payLoad);  
                         break;
 
                     default:
@@ -216,6 +219,27 @@ public class Servidor {
                 }
             }
               
+            public boolean removeImagem (Vector<Imagem> imagemVector, int id){
+                int indiceImagemRemovida=-1; 
+                int i=0;
+
+                for (Imagem f : imagemVector){
+                    if (f.getId() == id){
+                        indiceImagemRemovida=i;
+                        break;
+                    }
+                    i++;
+                }
+
+                if (indiceImagemRemovida!=-1){
+                    imagemVector.remove(indiceImagemRemovida);
+                    return true;
+                }
+                
+                return false;
+            }  
+            
+            
             /**
             * Remove um usuário e encerra a conexão
             *             

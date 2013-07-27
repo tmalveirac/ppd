@@ -41,6 +41,7 @@ public class Cliente {
                        tratarMensagemRecebida(data);
                } catch (Exception e) {
                        System.out.println("Cliente Exceção Thread Ler - Cliente Fechado");
+                       e.printStackTrace();
                }
                super.run();
            }
@@ -97,6 +98,11 @@ public class Cliente {
             case Protocolo.IMG_CTRI:
                 //payLoad = msg.replaceFirst(Protocolo.IMG_CQD, "");
                 Principal.criarFiguraAreaEdicao(TipoFigura.TRIANGULO, Integer.parseInt(payLoad));
+                break;
+                
+            case Protocolo.IMG_REMO:
+                Principal.removerFiguraAreaEdicao(Integer.parseInt(payLoad));
+                System.out.println("Remover figura id=" + payLoad);
                 break;
                 
             default:

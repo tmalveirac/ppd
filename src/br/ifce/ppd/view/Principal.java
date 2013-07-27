@@ -12,12 +12,18 @@ import br.ifce.utils.Figura;
 import br.ifce.utils.FiguraFactory;
 import br.ifce.utils.Protocolo;
 import br.ifce.utils.TipoFigura;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -335,36 +341,94 @@ public class Principal extends javax.swing.JFrame {
                 f = new Figura(FiguraFactory.QUADRADO(), id);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
-                figuraVertor.add(f);
+                figuraVector.add(f);
+                addEventosFigura(f);
                 break;
                 
             case TipoFigura.CIRCULO:
                 f = new Figura(FiguraFactory.CIRCULO(), id);
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
-                figuraVertor.add(f);
+                figuraVector.add(f);
+                addEventosFigura(f);
                 break;
                 
             case TipoFigura.TRIANGULO:
                 f = new Figura(FiguraFactory.TRIANGULO(), id);
+                
                 pnlAreaEdicao.add(f);
                 pnlAreaEdicao.repaint();
-                figuraVertor.add(f);
+                figuraVector.add(f);
+                addEventosFigura(f);
                 break;
         }
     }  
     
-    public void addEventosFigura(Figura f){
+    public static void addEventosFigura(final Figura f){
+        f.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                if (me.getButton() == MouseEvent.BUTTON3) {
+                    JPopupMenu menu = new JPopupMenu();  
+                    
+                    JMenuItem apagar = new JMenuItem("Apagar");  
+                    apagar.addActionListener(new ActionListener() {  
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {  
+                            //pnlAreaEdicao.remove(f);
+                            //pnlAreaEdicao.repaint();
+                            cliente.enviarMensagemEdicao(Protocolo.IMG_REMO, 
+                                    ""+f.getId());
+                        }  
+                    });  
+                    menu.add(apagar); 
+                    
+                    menu.show(f, me.getX(), me.getY());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+ 
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                
+            }
+        });
         
     }
     
+    public static int indiceByIdFigura(int id){
+        int i=0;
+        
+        for (Figura f : figuraVector){
+            if (f.getId()==id){
+                return i;
+            }
+            i++;
+        }
+        
+        return -1;
+    }
     
-    
-    public static void removerFiguraAreaEdicao(int id){
+     public static void removerFiguraAreaEdicao(int id){
         int indiceFiguraRemovida=-1; 
         int i=0;
         
-        for (Figura f : figuraVertor){
+        for (Figura f : figuraVector){
             if (f.getId() == id){
                 indiceFiguraRemovida=i;
                 break;
@@ -375,11 +439,14 @@ public class Principal extends javax.swing.JFrame {
         if (indiceFiguraRemovida!=-1){
 //            cliente.enviarMensagemEdicao(Protocolo.IMG_RQUA, 
 //                    ""+figuraVertor.get(indiceFiguraRemovida).getId());
-            figuraVertor.remove(indiceFiguraRemovida);
+            
+            pnlAreaEdicao.remove(figuraVector.get(indiceFiguraRemovida));
+            pnlAreaEdicao.repaint();
+            figuraVector.remove(indiceFiguraRemovida);
+            System.out.println("Removeu imagem da lista " + indiceFiguraRemovida);
         }
     } 
-    
-    
+ 
     
     
 //    ________________________________________________________________________
@@ -465,9 +532,9 @@ public class Principal extends javax.swing.JFrame {
     private static javax.swing.JTextArea txtAreaChat;
     private javax.swing.JTextField txtFieldChat;
     // End of variables declaration//GEN-END:variables
-    private Cliente cliente;
+    private static Cliente cliente;
     private String login;
     //Model utilizado para atualizar lista de logins na tela
     private static DefaultListModel  listModel = new DefaultListModel();    
-    private static Vector<Figura> figuraVertor = new Vector<Figura>();
+    private static Vector<Figura> figuraVector = new Vector<Figura>();
 }
