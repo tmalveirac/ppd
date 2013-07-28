@@ -63,6 +63,8 @@ public class Cliente {
             case Protocolo.CHAT_INS:
 //                payLoad = msg.replaceFirst(Protocolo.CHAT_INS, "");
                 Principal.insereListaChat(payLoad);
+                //Criar Label para ponta do mouse
+                Principal.criaPontaMouse(payLoad);
                 break;
             
             case Protocolo.CHAT_MSG:
@@ -84,6 +86,7 @@ public class Cliente {
                 //Excluir um cliente
 //                payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
                 Principal.removeListaChat(payLoad);
+                Principal.removePontaMouse(payLoad);
                 break;    
                 
             case Protocolo.IMG_CQUA:
@@ -110,6 +113,11 @@ public class Cliente {
                 campo = payLoad.split(":");
                 Principal.moverFiguraAreaEdicao(Integer.parseInt(campo[0]),Integer.parseInt(campo[1]),Integer.parseInt(campo[2]));
                 System.out.println("Movendo Figura id=" + campo[0]);
+                break;
+                
+            case Protocolo.PNL_MOVE:
+                campo = payLoad.split(":");
+                Principal.movePontaMouse(campo[0],Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
                 break;
                 
             default:

@@ -21,6 +21,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -252,6 +254,11 @@ public class Principal extends javax.swing.JFrame {
 
         pnlAreaEdicao.setBackground(java.awt.Color.white);
         pnlAreaEdicao.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Área de Edição", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        pnlAreaEdicao.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                pnlAreaEdicaoMouseMoved(evt);
+            }
+        });
         pnlAreaEdicao.setLayout(null);
 
         jMenu1.setText("Arquivo");
@@ -293,7 +300,7 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(pnlAreaEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlElementos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pack();
@@ -331,8 +338,57 @@ public class Principal extends javax.swing.JFrame {
             cliente.enviarMensagemEdicao(Protocolo.IMG_CTRI, "");
         }
     }//GEN-LAST:event_labTrianguloMouseClicked
+
+    private void pnlAreaEdicaoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlAreaEdicaoMouseMoved
+        int x = evt.getX();
+        int y = evt.getY();
+        String payload = x+":"+y;
+        cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
+        System.out.println("Movendo Mouse sobre o Painel");
+    }//GEN-LAST:event_pnlAreaEdicaoMouseMoved
     
+    public static void criaPontaMouse(String login){
+        JLabel l = new JLabel();
+        l.setBounds(10, 10, 200, 40);
+        l.setIcon(new ImageIcon("imagens/mouse.png"));
+        mouseVector.add(l);
+        l.setText(login);
+        l.setVisible(false);
+        pnlAreaEdicao.add(l);
+        pnlAreaEdicao.repaint();
+    }
     
+    public static void removePontaMouse(String login){
+        int i=0;
+        int mouseRemovido=-1;
+        
+        for (JLabel l : mouseVector){
+            if (l.getText().equals(login)){
+                pnlAreaEdicao.remove(l);
+                mouseRemovido=i;
+            }
+            i++;
+        }
+        
+        if (mouseRemovido!=-1){
+            mouseVector.remove(mouseRemovido);
+        }
+        
+    }
+    
+    public static void movePontaMouse(String login, int x, int y){
+        for (JLabel l : mouseVector){
+            if (l.getText().equals(login)){
+                if (x<=0 || y<=0){
+                    l.setVisible(false);
+                }
+                else{
+                    l.setLocation(x, y);
+                    l.setVisible(true);                 
+                }
+            }
+        }
+    }
     
     public static void criarFiguraAreaEdicao(int tipoFigura, int id, int x, int y){
         Figura f;
@@ -418,13 +474,21 @@ public class Principal extends javax.swing.JFrame {
                 //moverFiguraAreaEdicao(f.getId(), x, y); // Se o servidor não manda pra mim
                 String payload = f.getId()+":"+x+":"+y;  //Formato: id:x:y: -> 10:2:3 
                 cliente.enviarMensagemEdicao(Protocolo.IMG_MOVE, payload);                
+                
+                //Move ponta do mouse enquanto está arrastando
+                payload = x+":"+y;
+                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
             }
 
             @Override
             public void mouseMoved(MouseEvent me) {
-                
+                int x = me.getX();
+                int y = me.getY();
+                String payload = x+":"+y;
+                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
+                System.out.println("Movendo Mouse sobre uma figura");
             }
-        });    
+        });  
     }
     
     
@@ -575,4 +639,5 @@ public class Principal extends javax.swing.JFrame {
     //Model utilizado para atualizar lista de logins na tela
     private static DefaultListModel  listModel = new DefaultListModel();    
     private static Vector<Figura> figuraVector = new Vector<Figura>();
+    private static Vector<JLabel> mouseVector = new Vector<JLabel>();
 }

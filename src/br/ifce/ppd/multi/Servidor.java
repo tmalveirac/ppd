@@ -156,6 +156,10 @@ public class Servidor {
                     try {                            
                              DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
 
+                             if (u.getSocket().equals(cliente) && protocolo.equals(Protocolo.PNL_MOVE)){
+                                 continue;
+                             }
+                             
                             //Envia
                             outData.writeUTF(protocolo+msg);
                     } catch (IOException ex) {
@@ -176,6 +180,7 @@ public class Servidor {
             public void tratarMensagemRecebida(String msg){
                 String comando = msg.substring(0, 8); //Extrai o comando 
                 String payLoad = msg.replaceFirst(comando, "");
+                String campo[];
 
                 // Trata a mensagem conforme o protocolo
                 switch (comando){
@@ -234,11 +239,18 @@ public class Servidor {
                         break;
                         
                     case Protocolo.IMG_MOVE:
-                        String campo[] = payLoad.split(":"); //pega id, posX e posY da figura
+                        campo = payLoad.split(":"); //pega id, posX e posY da figura
                         atualizaPosicaoImagem(Integer.parseInt(campo[0]), Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_MOVE, payLoad);
                         
                         System.out.println("Mover figura");
+                        break;
+                    
+                    case Protocolo.PNL_MOVE:
+                        campo = payLoad.split(":");
+                        payLoad = usuarioBySocket(usuarioVector, cliente).getNome()+":"+campo[0]+":"+campo[1];
+                        enviarMensagemParaTodosEdicao(Protocolo.PNL_MOVE, payLoad);
+                        System.out.println("Movendo Mouse");
                         break;
 
                     default:
