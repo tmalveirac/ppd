@@ -12,6 +12,7 @@ import br.ifce.utils.Figura;
 import br.ifce.utils.FiguraFactory;
 import br.ifce.utils.Protocolo;
 import br.ifce.utils.TipoFigura;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,6 +21,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.border.Border;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -343,7 +346,7 @@ public class Principal extends javax.swing.JFrame {
         int x = evt.getX();
         int y = evt.getY();
         String payload = x+":"+y;
-        cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
+        cliente.enviarMensagemEdicao(Protocolo.PNL_MOVP, payload);
         System.out.println("Movendo Mouse sobre o Painel");
     }//GEN-LAST:event_pnlAreaEdicaoMouseMoved
     
@@ -354,6 +357,7 @@ public class Principal extends javax.swing.JFrame {
         mouseVector.add(l);
         l.setText(login);
         l.setVisible(false);
+        //l.setBorder(BorderFactory.createLineBorder(Color.yellow));
         pnlAreaEdicao.add(l);
         pnlAreaEdicao.repaint();
     }
@@ -376,19 +380,62 @@ public class Principal extends javax.swing.JFrame {
         
     }
     
-    public static void movePontaMouse(String login, int x, int y){
+    public static void movePontaMouseSemFigura(String login, int x, int y){
         for (JLabel l : mouseVector){
             if (l.getText().equals(login)){
-                if (x<=0 || y<=0){
+                if (x<=15 || y<=18){
                     l.setVisible(false);
                 }
                 else{
-                    l.setLocation(x, y);
-                    l.setVisible(true);                 
+                    if (x>512 || y>455){
+                        l.setVisible(false);
+                    }
+                    else{
+                        l.setLocation(x, y);
+                        l.setVisible(true);  
+                    }                                 
                 }
+            }
+//            else{
+//                l.setVisible(false);
+//            }
+        }
+    }
+    
+    public static void movePontaMouseComFigura(String login, int x, int y){
+        for (JLabel l : mouseVector){
+            if (l.getText().equals(login)){
+                l.setLocation(x, y);
+                l.setVisible(true);
+            }
+//            else{
+//                l.setVisible(false);
+//            }
+        }
+    }
+    
+    
+    public static void movePontaMouseComFiguraDrag(String login, int x, int y){
+        for (JLabel l : mouseVector){
+            if (l.getText().equals(login)){
+                
+                if (x > pnlAreaEdicao.getBounds().width - 55) {
+                    x = pnlAreaEdicao.getBounds().width - 55;
+                } else if (x < 5) {
+                    x = 5;
+                }
+                if (y > pnlAreaEdicao.getBounds().height - 55) {
+                    y = pnlAreaEdicao.getBounds().height - 55;
+                } else if (y < 15) {
+                    y = 15;
+                }
+                
+                l.setLocation(x, y);
+                l.setVisible(true);
             }
         }
     }
+    
     
     public static void criarFiguraAreaEdicao(int tipoFigura, int id, int x, int y){
         Figura f;
@@ -450,6 +497,15 @@ public class Principal extends javax.swing.JFrame {
 
             @Override
             public void mouseReleased(MouseEvent me) {
+                System.out.println("SOLTOU MOUSE");
+                //Move ponta do mouse enquanto está arrastando
+                int x= me.getXOnScreen() + f.getLocation().x;
+                int y= me.getYOnScreen() + f.getLocation().y;
+                String payload = x+":"+y;
+                
+                System.err.println("Location x= " + me.getXOnScreen() + " y = " + me.getYOnScreen());
+                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVP, payload);
+                
                 
             }
 
@@ -476,16 +532,21 @@ public class Principal extends javax.swing.JFrame {
                 cliente.enviarMensagemEdicao(Protocolo.IMG_MOVE, payload);                
                 
                 //Move ponta do mouse enquanto está arrastando
+                x= me.getX() + f.getLocation().x;
+                y= me.getY() + f.getLocation().y;
                 payload = x+":"+y;
-                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
+                
+                System.err.println("Location x= " + me.getXOnScreen() + " y = " + me.getYOnScreen());
+                cliente.enviarMensagemEdicao(Protocolo.PNL_DRGF, payload);
             }
 
             @Override
             public void mouseMoved(MouseEvent me) {
-                int x = me.getX();
-                int y = me.getY();
+                
+                int x = me.getX() + f.getLocation().x;
+                int y = me.getY() + f.getLocation().y;
                 String payload = x+":"+y;
-                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVE, payload);
+                cliente.enviarMensagemEdicao(Protocolo.PNL_MOVF, payload);
                 System.out.println("Movendo Mouse sobre uma figura");
             }
         });  

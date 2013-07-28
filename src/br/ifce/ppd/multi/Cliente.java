@@ -115,9 +115,19 @@ public class Cliente {
                 System.out.println("Movendo Figura id=" + campo[0]);
                 break;
                 
-            case Protocolo.PNL_MOVE:
+            case Protocolo.PNL_MOVP:
                 campo = payLoad.split(":");
-                Principal.movePontaMouse(campo[0],Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
+                Principal.movePontaMouseSemFigura(campo[0],Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
+                break;
+                
+            case Protocolo.PNL_MOVF:
+                campo = payLoad.split(":");
+                Principal.movePontaMouseComFigura(campo[0],Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
+                break;
+                
+            case Protocolo.PNL_DRGF:
+                campo = payLoad.split(":");
+                Principal.movePontaMouseComFiguraDrag(campo[0],Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
                 break;
                 
             default:

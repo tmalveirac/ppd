@@ -27,7 +27,8 @@ public class Protocolo {
     public static final String IMG_REMO = "IMG_RQUA"; //Remove uma figura    
     public static final String IMG_MOVE = "IMG_MOVE"; //Move uma figura
     
-    public static final String PNL_MOVE = "PNL_MOVE"; //Move o mouse no panel
-    
+    public static final String PNL_MOVP = "PNL_MOVP"; //Move o mouse no panel 
+    public static final String PNL_MOVF = "PNL_MOVF"; //Move o mouse na figura
+    public static final String PNL_DRGF = "PNL_DRGF"; //Move o mouse na figura no drag
     
 }

@@ -156,7 +156,8 @@ public class Servidor {
                     try {                            
                              DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
 
-                             if (u.getSocket().equals(cliente) && protocolo.equals(Protocolo.PNL_MOVE)){
+                             if (u.getSocket().equals(cliente) && (protocolo.equals(Protocolo.PNL_MOVP) || 
+                                     protocolo.equals(Protocolo.PNL_MOVF) || protocolo.equals(Protocolo.PNL_DRGF))){
                                  continue;
                              }
                              
@@ -246,13 +247,27 @@ public class Servidor {
                         System.out.println("Mover figura");
                         break;
                     
-                    case Protocolo.PNL_MOVE:
+                    case Protocolo.PNL_MOVP:
                         campo = payLoad.split(":");
                         payLoad = usuarioBySocket(usuarioVector, cliente).getNome()+":"+campo[0]+":"+campo[1];
-                        enviarMensagemParaTodosEdicao(Protocolo.PNL_MOVE, payLoad);
+                        enviarMensagemParaTodosEdicao(Protocolo.PNL_MOVP, payLoad);
                         System.out.println("Movendo Mouse");
                         break;
+                    
+                    case Protocolo.PNL_MOVF:
+                        campo = payLoad.split(":");
+                        payLoad = usuarioBySocket(usuarioVector, cliente).getNome()+":"+campo[0]+":"+campo[1];
+                        enviarMensagemParaTodosEdicao(Protocolo.PNL_MOVF, payLoad);
+                        System.out.println("Movendo Mouse na figura");
+                        break;
 
+                    case Protocolo.PNL_DRGF:
+                        campo = payLoad.split(":");
+                        payLoad = usuarioBySocket(usuarioVector, cliente).getNome()+":"+campo[0]+":"+campo[1];
+                        enviarMensagemParaTodosEdicao(Protocolo.PNL_DRGF, payLoad);
+                        System.out.println("Movendo Mouse na figura Drag");
+                        break;
+                        
                     default:
                         System.out.println("Case Default - MSG Recebida: " + comando);
                 }
