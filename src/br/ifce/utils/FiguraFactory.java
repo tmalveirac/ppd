@@ -1,5 +1,12 @@
 package br.ifce.utils;
 
+/**
+ * Classe: FiguraFactory.java
+ * Define os métodos que geram figuras geométricas
+ * @author Tiago Malveira
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -9,6 +16,10 @@ import javax.swing.ImageIcon;
 
 public class FiguraFactory {
 
+        /**
+        * Desenha um círculo
+        * @return               objeto ImageIcon de um círculo
+        */
 	public static ImageIcon CIRCULO() {
 
 		BufferedImage buffer = new BufferedImage(50, 50,
@@ -21,6 +32,10 @@ public class FiguraFactory {
 
 	}
 
+        /**
+        * Desenha um quadrado
+        * @return               objeto ImageIcon de um quadrado
+        */
 	public static ImageIcon QUADRADO() {
 
 		BufferedImage buffer = new BufferedImage(50, 50,
@@ -32,6 +47,10 @@ public class FiguraFactory {
 		return new ImageIcon(buffer);
 	}
 
+        /**
+        * Desenha um triângulo
+        * @return               objeto ImageIcon de um triângulo
+        */
 	public static ImageIcon TRIANGULO() {
 		BufferedImage buffer = new BufferedImage(50, 50,
 				BufferedImage.TRANSLUCENT);

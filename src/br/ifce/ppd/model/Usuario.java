@@ -1,4 +1,4 @@
-package br.ifce.ppd.multi;
+package br.ifce.ppd.model;
 
 /**
  * Classe: Usuario.java

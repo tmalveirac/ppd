@@ -1,4 +1,4 @@
-package br.ifce.ppd.multi;
+package br.ifce.ppd.control;
 
 /**
  * Classe: Cliente.java
@@ -48,6 +48,27 @@ public class Cliente {
     }
      
     /**
+    * Conecta ao servidor
+    *
+    * @param servidor       endereço do servidor
+    * @param porta          número da porta
+    * @return               void
+    */
+    public void conectar(String servidor, String porta){
+        try {
+            InetAddress endereco = InetAddress.getByName(servidor);
+            cliente = new Socket(endereco, Integer.parseInt(porta));
+            in =  new DataInputStream(cliente.getInputStream());
+            out = new DataOutputStream(cliente.getOutputStream());           
+        } catch (Exception e) {
+            //Servidor fora do ar, avisa ao usuário
+            Principal.alertaServidorOff();
+        } 
+        //Se conectou, inicia a thread
+        new ClienteLerThread().start();      
+    }
+    
+    /**
     * Trata mensagem recebida do Servidor
     *
     * @param msg           mensagem recebida
@@ -61,19 +82,16 @@ public class Cliente {
         switch (comando){
             
             case Protocolo.CHAT_INS:
-//                payLoad = msg.replaceFirst(Protocolo.CHAT_INS, "");
                 Principal.insereListaChat(payLoad);
                 //Criar Label para ponta do mouse
                 Principal.criaPontaMouse(payLoad);
                 break;
             
             case Protocolo.CHAT_MSG:
-//                payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
                 Principal.escreveMensagemChat(payLoad);                
                 break;
             
             case Protocolo.CHAT_NOT:                
-//                payLoad = msg.replaceFirst(Protocolo.CHAT_NOT, "");
                 Principal.escreveMensagemChat(payLoad);
                 break;
                 
@@ -84,7 +102,6 @@ public class Cliente {
             
             case Protocolo.CHAT_REM:
                 //Excluir um cliente
-//                payLoad = msg.replaceFirst(Protocolo.CHAT_REM, "");
                 Principal.removeListaChat(payLoad);
                 Principal.removePontaMouse(payLoad);
                 break;    
@@ -134,54 +151,20 @@ public class Cliente {
                 System.out.println("Case Default - MSG Recebida: " + comando);                
         }        
     }
-        
-    /**
-    * Conecta ao servidor
-    *
-    * @return              void
-    */
-    public void conectar(String servidor, String porta){
-        try {
-            InetAddress endereco = InetAddress.getByName(servidor);
-            cliente = new Socket(endereco, Integer.parseInt(porta));
-            in =  new DataInputStream(cliente.getInputStream());
-            out = new DataOutputStream(cliente.getOutputStream());           
-        } catch (Exception e) {
-            //Servidor fora do ar, avisa ao usuário
-            Principal.alertaServidorOff();
-        } 
-        //Se conectou, inicia a thread
-        new ClienteLerThread().start();      
-    }
-    
-    public void iniciaThread (){
-        new ClienteLerThread().start();
-    }
     
     /**
-    * Envia mensagem de chat para o Servidor
+    * Envia mensagem para o Servidor
     *
     * @param protocolo     protocolo usado na mensagem (classe Protocolo) 
     * @param msg           mensagem a ser enviada
     * @return              void
     */
-    public void enviarMensagemChat(String protocolo,String msg){
+    public void enviarMensagem(String protocolo,String msg){
         try {
             out.writeUTF(protocolo+msg);
             out.flush();
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    
-    public void enviarMensagemEdicao(String protocolo,String msg){
-        try {
-            out.writeUTF(protocolo+msg);
-            out.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+    }  
 }

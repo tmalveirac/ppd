@@ -1,10 +1,12 @@
-
 package br.ifce.utils;
 
 /**
- *
- * @author malveira
+ * Classe: TipoFigura.java
+ * Define um tipo de figura 
+ * @author Tiago Malveira
+ * 
  */
+
 public class TipoFigura {
     public static final int QUADRADO = 1;
     public static final int CIRCULO = 2;

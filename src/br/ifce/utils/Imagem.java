@@ -1,9 +1,12 @@
 package br.ifce.utils;
 
 /**
- *
- * @author malveira
+ * Classe: Imagem.java
+ * Define uma imagem da aplicação
+ * @author Tiago Malveira
+ * 
  */
+
 public class Imagem {
     private int id;
     private int tipoFigura;  
@@ -48,8 +51,5 @@ public class Imagem {
     public void setPosY(int posY) {
         this.posY = posY;
     }
-    
-    
-    
-    
+  
 }

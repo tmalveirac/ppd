@@ -1,4 +1,4 @@
-package br.ifce.ppd.multi;
+package br.ifce.ppd.control;
 
 /**
  * Classe: Servidor.java
@@ -7,8 +7,8 @@ package br.ifce.ppd.multi;
  * 
  */
 
+import br.ifce.ppd.model.Usuario;
 import br.ifce.ppd.view.Principal;
-import br.ifce.utils.Figura;
 import br.ifce.utils.Imagem;
 import br.ifce.utils.Protocolo;
 import br.ifce.utils.TipoFigura;
@@ -113,7 +113,7 @@ public class Servidor {
             }                         
                
              /**
-             * Envia mensagem para todos os usuários
+             * Envia mensagem de Chat para todos os usuários
              *
              * @param protocolo     protocolo usado na mensagem (classe Protocolo) 
              * @param msg           mensagem a ser enviada
@@ -150,12 +150,19 @@ public class Servidor {
                 }
             }
             
-            
+            /**
+             * Envia mensagem de Edição para todos os usuários
+             *
+             * @param protocolo     protocolo usado na mensagem (classe Protocolo) 
+             * @param msg           mensagem a ser enviada
+             * @return              void
+             */
             public void enviarMensagemParaTodosEdicao(String protocolo, String msg){                    
                 for (Usuario u : usuarioVector){                                         
                     try {                            
                              DataOutputStream outData = new DataOutputStream(u.getSocket().getOutputStream());
 
+                             //Não envia para o cliente que originou (evento do mouse)
                              if (u.getSocket().equals(cliente) && (protocolo.equals(Protocolo.PNL_MOVP) || 
                                      protocolo.equals(Protocolo.PNL_MOVF) || protocolo.equals(Protocolo.PNL_DRGF))){
                                  continue;
@@ -170,8 +177,6 @@ public class Servidor {
                 }
             }
             
-            
-
             /**
             * Trata a mensagem recebida
             *             
@@ -186,19 +191,10 @@ public class Servidor {
                 // Trata a mensagem conforme o protocolo
                 switch (comando){
 
-                    case Protocolo.CHAT_INS:
-                        //Nunca é enviada para o servidor
-                        break;
-
                     case Protocolo.CHAT_MSG:
-//                        payLoad = msg.replaceFirst(Protocolo.CHAT_MSG, "");
                         String data;
                         data = usuarioBySocket(usuarioVector, cliente).getNome() + " enviou: " + payLoad;
                         enviarMensagemParaTodosChat(Protocolo.CHAT_MSG, data);
-                        break;
-
-                    case Protocolo.CHAT_NOT:
-                            //Nunca é enviada para o servidor
                         break;
 
                     case Protocolo.CHAT_SAI:                          
@@ -208,8 +204,7 @@ public class Servidor {
                         enviarMensagemParaTodosChat(Protocolo.CHAT_REM, usuarioBySocket(usuarioVector, cliente).getNome());
                         removeUsuario(usuarioVector, cliente);
                         System.out.println("Removeu Usuario ");                           
-                        break;
-                        
+                        break;                        
                         
                     case Protocolo.IMG_CQUA:
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_CQUA, ""+idImg+":10"+":10");  
@@ -222,8 +217,7 @@ public class Servidor {
                         enviarMensagemParaTodosEdicao(Protocolo.IMG_CCIR, ""+idImg+":10"+":10"); 
                         Imagem circulo = new Imagem(idImg++, TipoFigura.CIRCULO, 10, 10);
                         imagemVector.add(circulo);
-                        System.out.println("Removeu Circulo ");   
-                       
+                        System.out.println("Removeu Circulo ");                          
                         break;
                         
                     case Protocolo.IMG_CTRI:
@@ -242,8 +236,7 @@ public class Servidor {
                     case Protocolo.IMG_MOVE:
                         campo = payLoad.split(":"); //pega id, posX e posY da figura
                         atualizaPosicaoImagem(Integer.parseInt(campo[0]), Integer.parseInt(campo[1]), Integer.parseInt(campo[2]));
-                        enviarMensagemParaTodosEdicao(Protocolo.IMG_MOVE, payLoad);
-                        
+                        enviarMensagemParaTodosEdicao(Protocolo.IMG_MOVE, payLoad);                        
                         System.out.println("Mover figura");
                         break;
                     
@@ -273,6 +266,14 @@ public class Servidor {
                 }
             }
             
+            /**
+            * Atualiza a posição da imagem no Panel
+            *             
+            * @param id         identificador da imagem
+            * @param x          posição no eixo X   
+            * @param y          posição no eixo Y 
+            * @return           void
+            */
             public void atualizaPosicaoImagem(int id, int x, int y){
                 for (Imagem img : imagemVector){
                     if (img.getId()==id){
@@ -282,6 +283,13 @@ public class Servidor {
                 }
             }
               
+            /**
+            * Remove uma imagem do vector de imagens
+            *             
+            * @param imagemVector   Vector das imagens
+            * @param id             identificador da imagem
+            * @return               true, se removeu, false, caso contrário
+            */
             public boolean removeImagem (Vector<Imagem> imagemVector, int id){
                 int indiceImagemRemovida=-1; 
                 int i=0;
@@ -310,7 +318,6 @@ public class Servidor {
             * @param socket     socket do usuário a ser removido e encerrado    
             * @return           true, se foi removido, false caso contrário
             */
-            //Remove um socket da lista, devolvendo true. Caso contrário, devolve false
             public boolean removeUsuario (Vector<Usuario> usuarios, Socket socket){
                     int usuarioRemovido=-1;
                     int i=0;
