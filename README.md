@@ -25,7 +25,7 @@ OBSERVAÇÕES:
 
 - Caso o servidor esteja indisponível, a aplicação exibirá uma mensagem de alerta. Nesse caso, inicie o Servidor e tente novamente;
 
-- Caso já exista alguém com seu nome de login, ele será alterado para seuloginCOD, em que COD é um numero para diferenciar dos demais;
+- Caso já exista alguém com seu login, ele será alterado para seuloginCOD, em que COD é um número para diferenciar dos demais;
 
 
 DÚVIDAS:
