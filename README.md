@@ -4,7 +4,7 @@ ppd
 Projeto de PPD - Editor Colaborativo
 Autor: Tiago Malveira Cavalcante
 
-PRÉ_REQUISITO:
+PRÉ-REQUISITO:
 
 - JAVA 7;
 
@@ -29,9 +29,11 @@ OBSERVAÇÕES:
 
 - Caso o servidor esteja indisponível, a aplicação exibirá uma mensagem de alerta. Nesse caso, inicie o Servidor e tente novamente;
 
-- Caso já exista alguém com seu login, ele será alterado para seuloginCOD, em que COD é um número para diferenciar dos demais;
+- Caso já exista alguém com seu login, ele será alterado para seuloginCOD, em que COD é um número para diferenciar dos demais usuários;
+
+- Caso o servidor seja encerrado, todos os clientes exibirão uma mensagem de alerta e serão finalizados.
 
 
 DÚVIDAS:
 
-- Entrar em contato pelo endereço tmalveirac@gmail.com
+- Entrar em contato pelo e-mail tmalveirac@gmail.com
