@@ -4,6 +4,10 @@ ppd
 Projeto de PPD - Editor Colaborativo
 Autor: Tiago Malveira Cavalcante
 
+PRÉ_REQUISITO:
+
+- JAVA 7;
+
 
 COMO INICIAR A APLICAÇÃO:
 
