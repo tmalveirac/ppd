@@ -2,9 +2,13 @@ ppd
 ===
 
 Engenharia de Computação
+
 Disciplina: Programação Paralela e Distribuída
+
 Professor: Cidcley Teixeira
+
 Projeto: Editor Colaborativo
+
 Autor: Tiago Malveira Cavalcante
 
 PRÉ-REQUISITO:
