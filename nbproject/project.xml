@@ -6,6 +6,7 @@
             <name>ppd</name>
             <explicit-platform explicit-source-supported="true"/>
             <source-roots>
+                <root id="src.imagens.dir"/>
                 <root id="src.dir"/>
             </source-roots>
             <test-roots>

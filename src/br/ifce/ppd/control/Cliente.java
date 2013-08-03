@@ -40,6 +40,7 @@ public class Cliente {
                        }
                        tratarMensagemRecebida(data);
                } catch (Exception e) {
+                       Principal.finalizar();
                        System.out.println("Cliente Exceção Thread Ler - Cliente Fechado");
                        e.printStackTrace();
                }

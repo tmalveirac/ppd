@@ -356,6 +356,20 @@ public class Principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menuSobreActionPerformed
     
+     /**
+    * Envia uma mensagem de saída para o Servidor e termina 
+    *             
+    * @return       void
+    */
+    public static void finalizar() {
+        JOptionPane.showMessageDialog(
+                null,
+                "O servidor parou de responder. O programa será finalizado.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+        System.exit(0);
+    }
+    
     /**
     * Cria a ponta do mouse de cliente que entra na aplicação
     *             
@@ -365,7 +379,9 @@ public class Principal extends javax.swing.JFrame {
     public static void criaPontaMouse(String login){
         JLabel l = new JLabel();
         l.setBounds(10, 10, 200, 40);
-        l.setIcon(new ImageIcon("imagens/mouse.png"));
+        l.setIcon(new ImageIcon(Principal.class.getClassLoader()
+				.getResource("mouse.png")));
+       
         mouseVector.add(l);
         l.setText(login);
         l.setVisible(false);
